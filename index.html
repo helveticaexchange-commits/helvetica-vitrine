@@ -466,8 +466,10 @@ function applyValue(v, tsIso){
     m.all.push([code, +d.mid * (+(d.unit||1))]);
   }
   m.all.sort(function(a,b){ return a[0]<b[0]?-1:1; });
-  m.xau = (v.gold && v.gold.XAU) ? +v.gold.XAU.mid : (model?model.xau:SNAP.xau);
-  m.xag = (v.silver && v.silver.XAG) ? +v.silver.XAG.mid : (model?model.xag:SNAP.xag);
+  /* OR/ARGENT : règle de Fafa — prix du GRAMME live (série filtrée) × 1000.
+     Le rateboard peut porter des ticks aberrants → on ne le lit plus pour les métaux. */
+  m.xau = model ? model.xau : SNAP.xau;
+  m.xag = model ? model.xag : SNAP.xag;
   if (m.all.length){ model=m; renderBoard(); saveCache(); }
 }
 function loadBoard(){
@@ -483,17 +485,18 @@ function loadCloud(){
     {headers:{apikey:CKEY, Authorization:'Bearer '+CKEY}})
   .then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.json(); })
   .then(function(rows){
-    var i,r2,c=[];
+    var i,r2,c=[],au=0,ag=0;
     for(i=0;i<rows.length;i++){
       r2=rows[i];
       if(r2.key==='BTC/CHF') c.push(['BTC',+r2.mid]);
       if(r2.key==='ETH/CHF') c.push(['ETH',+r2.mid]);
-      if(model && !model.live){
-        if(r2.key==='XAU/CHF') model.xau=+r2.mid*1000;
-        if(r2.key==='XAG/CHF') model.xag=+r2.mid*1000;
-      }
+      /* gramme live filtré ×1000 = kilo — garde-fou anti-tick aberrant */
+      if(r2.key==='XAU/CHF' && +r2.mid>50 && +r2.mid<500)  au=+r2.mid*1000;
+      if(r2.key==='XAG/CHF' && +r2.mid>0.3 && +r2.mid<20)  ag=+r2.mid*1000;
     }
-    if(c.length){ cryptoTick=c; renderTicker(); }
+    if(c.length) cryptoTick=c;
+    if(model && (au||ag)){ if(au) model.xau=au; if(ag) model.xag=ag; saveCache(); }
+    if(model) renderBoard();
   })
   .catch(function(){});
 }
@@ -506,12 +509,14 @@ function saveCache(){ try{ localStorage.setItem('hx_v4', JSON.stringify(model));
 function loadCache(){
   try{ var s=localStorage.getItem('hx_v4'); if(!s) return false;
     var m=JSON.parse(s); if(!m||!m.all||!m.all.length) return false;
+    if(!(m.xau>50000 && m.xau<500000)) m.xau=SNAP.xau;   /* purge tick aberrant mémorisé */
+    if(!(m.xag>300 && m.xag<20000)) m.xag=SNAP.xag;
     m.live=false; model=m; renderBoard(); return true; }catch(e){ return false; }
 }
 applySnap();                       /* affichage immédiat, remplacé par le live */
 loadBoard(); loadCloud();
 setInterval(loadBoard, 180000);    /* cadence DARIC ~3 min */
-setInterval(loadCloud, 300000);
+setInterval(loadCloud, 180000);    /* or/argent gramme live ×1000, même cadence */
 
 /* ── horloge ── */
 var JOURS=['DIMANCHE','LUNDI','MARDI','MERCREDI','JEUDI','VENDREDI','SAMEDI'];
