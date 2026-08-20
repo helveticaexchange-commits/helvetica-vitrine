@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=576,initial-scale=1,user-scalable=no">
 <meta name="robots" content="noindex">
 <title>HELVETICA EXCHANGE · Vitrine LED</title>
 <style>
@@ -19,6 +19,7 @@ body{font-family:'Didot','Playfair Display','Cormorant Garamond',Georgia,'Times 
   -webkit-font-smoothing:antialiased;cursor:none}
 #fit{position:fixed;inset:0;display:block;background:#241505}
 #stage{position:absolute;left:50%;top:50%;width:2100px;height:2100px;
+  transform:translate(-50%,-50%) scale(.274286); /* secours sans JS : parfait sur 576×576 */
   transform-origin:center center;overflow:hidden;
   background:
     radial-gradient(1500px 1100px at 50% -8%, rgba(255,196,90,.32), rgba(255,196,90,0) 62%),
@@ -189,24 +190,30 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
         <div>Nous achetons<small>We buy</small></div>
         <div>Nous vendons<small>We sell</small></div>
       </div>
-      <div id="rows"></div>
+      <div id="rows">
+        <div class="row"><div class="dev"><span class="flag">🇪🇺</span><span><span class="code">EUR</span><div class="nm">Euro</div></span></div><div class="mid">0.9329</div><div class="buy">0.9140</div><div class="sell">0.9500</div></div>
+        <div class="row"><div class="dev"><span class="flag">🇺🇸</span><span><span class="code">USD</span><div class="nm">Dollar US</div></span></div><div class="mid">0.7985</div><div class="buy">0.7720</div><div class="sell">0.8180</div></div>
+        <div class="row"><div class="dev"><span class="flag">🇬🇧</span><span><span class="code">GBP</span><div class="nm">Livre sterling</div></span></div><div class="mid">1.0890</div><div class="buy">1.0550</div><div class="sell">1.1250</div></div>
+        <div class="row"><div class="dev"><span class="flag">🇯🇵</span><span><span class="code">JPY</span><div class="nm">Yen · pour 100</div></span></div><div class="mid">0.5031</div><div class="buy">0.4820</div><div class="sell">0.5330</div></div>
+        <div class="row"><div class="dev"><span class="flag">🇨🇦</span><span><span class="code">CAD</span><div class="nm">Dollar canadien</div></span></div><div class="mid">0.5797</div><div class="buy">0.5520</div><div class="sell">0.6080</div></div>
+      </div>
     </section>
 
     <!-- OR & ARGENT -->
     <section class="sc" id="sc-gold">
       <div class="gttl">OR FIN 999.9</div>
       <div class="gsub">Cours en direct · Live gold price</div>
-      <div class="gbig" id="gau-g">—</div>
+      <div class="gbig" id="gau-g">114.93</div>
       <div class="gunit">CHF · LE GRAMME</div>
       <div class="gline">
-        <div><b id="gau-oz">—</b><span>CHF · L'ONCE</span></div>
-        <div><b id="gau-kg">—</b><span>CHF · LE KILO</span></div>
+        <div><b id="gau-oz">3'575</b><span>CHF · L'ONCE</span></div>
+        <div><b id="gau-kg">114'932</b><span>CHF · LE KILO</span></div>
       </div>
       <div class="gsep"></div>
       <div class="arg">
         <span class="t">ARGENT 999</span>
-        <b id="gag-g">—</b><span>CHF/g</span>
-        <b id="gag-kg">—</b><span>CHF/kg</span>
+        <b id="gag-g">1.72</b><span>CHF/g</span>
+        <b id="gag-kg">1'721</b><span>CHF/kg</span>
       </div>
     </section>
 
@@ -225,14 +232,14 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
     </section>
   </main>
 
-  <div id="tickw"><div id="tick"></div></div>
+  <div id="tickw"><div id="tick"><span class="ti"><b>OR</b><span>114.93 CHF/g</span></span><span class="tsep">◆</span><span class="ti"><b>ARGENT</b><span>1.72 CHF/g</span></span><span class="tsep">◆</span><span class="ti"><b>EUR</b><span>0.9329</span></span><span class="tsep">◆</span><span class="ti"><b>USD</b><span>0.7985</span></span><span class="tsep">◆</span><span class="ti"><b>GBP</b><span>1.0890</span></span><span class="tsep">◆</span><span class="ti"><b>JPY</b><span>0.5031</span></span><span class="tsep">◆</span><span class="ti"><b>CAD</b><span>0.5797</span></span><span class="tsep">◆</span><span class="ti"><b>AED</b><span>0.2187</span></span><span class="tsep">◆</span><span class="ti"><b>CNY</b><span>0.1188</span></span><span class="tsep">◆</span><span class="ti"><b>TRY</b><span>0.0165</span></span></div></div>
 
   <footer>
     <div class="faddr">19 RUE PIERRE-FATIO · 1204 GENÈVE</div>
     <div class="fsub">
       <span>LUN–VEN 8H30–18H30 · SAM 9H–17H</span>
       <span class="dot"></span>
-      <span>TAUX EN DIRECT · LIVE RATES · <span id="maj">—</span></span>
+      <span>TAUX EN DIRECT · LIVE RATES · <span id="maj">15:38</span></span>
     </div>
   </footer>
 
@@ -253,10 +260,20 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
 /* ── mise à l'échelle : scène 2100×2100 → n'importe quel écran ── */
 var stage = document.getElementById('stage');
 function fit(){
-  var s = Math.min(window.innerWidth/2100, window.innerHeight/2100);
-  stage.style.transform = 'translate(-50%,-50%) scale(' + s + ')';
+  var W = window.innerWidth || document.documentElement.clientWidth || 576;
+  var H = window.innerHeight || document.documentElement.clientHeight || 576;
+  var s = Math.min(W/2100, H/2100);
+  if (!(s > 0)) s = 576/2100;
+  if ('transform' in stage.style){
+    stage.style.transform = 'translate(-50%,-50%) scale(' + s + ')';
+  } else {                                   /* très vieux navigateur embarqué */
+    stage.style.zoom = s; stage.style.left = '0'; stage.style.top = '0';
+  }
 }
-window.addEventListener('resize', fit); fit();
+window.addEventListener('resize', fit);
+window.addEventListener('orientationchange', fit);
+window.addEventListener('load', fit);
+fit(); setTimeout(fit,300); setTimeout(fit,1500); setInterval(fit,5000);
 document.addEventListener('dblclick', function(){
   var d = document.documentElement;
   if (!document.fullscreenElement && d.requestFullscreen) d.requestFullscreen();
