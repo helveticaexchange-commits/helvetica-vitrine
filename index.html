@@ -268,11 +268,17 @@ var FORCE = (function(){
 })();
 function fit(){
   if (FORCE > 0){
-    stage.style.left = '0'; stage.style.top = '0';
+    /* centrage par marges fixes : sur une surface FORCE×FORCE → plein cadre à 0,0 ;
+       sur une surface interne plus grande (ex. 1024×1024 recadrée au centre par le
+       lecteur) → pile au centre. Aucun pourcentage de transform, aucune mesure JS. */
+    stage.style.left = '50%'; stage.style.top = '50%';
+    stage.style.marginLeft = '-' + (FORCE/2) + 'px';
+    stage.style.marginTop  = '-' + (FORCE/2) + 'px';
     stage.style.transformOrigin = '0 0';
     stage.style.transform = 'scale(' + (FORCE/2100) + ')';
     return;
   }
+  stage.style.marginLeft = '0'; stage.style.marginTop = '0';
   var W = window.innerWidth || document.documentElement.clientWidth || 576;
   var H = window.innerHeight || document.documentElement.clientHeight || 576;
   var s = Math.min(W/2100, H/2100);
