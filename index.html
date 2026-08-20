@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HELVETICA EXCHANGE — Vitrine</title>
+<style>
+  :root{
+    --bg:#060608; --bg2:#0a0a0e; --gold:#D4B476; --gold2:#E8CD9A; --gold-dim:rgba(212,180,118,.4);
+    --ink:#F2EFE9; --ink2:#B9B4AB; --ink3:#6E6A63; --jade:#8FC7A6; --serif:"Didot","Bodoni MT","Playfair Display",Georgia,serif;
+  }
+  *{margin:0; padding:0; box-sizing:border-box}
+  html,body{height:100%; overflow:hidden; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,"Helvetica Neue",Inter,Arial,sans-serif; cursor:none}
+  /* fond vidéo or */
+  #bgv{position:fixed; inset:0; width:100vw; height:100vh; object-fit:cover; opacity:0; filter:saturate(.9) brightness(.8); transition:opacity 2.5s}
+  #bgv.on{opacity:.18}
+  /* fond bronze vivant — le thème des panneaux */
+  .bronze{position:fixed; inset:0; background:
+    radial-gradient(1400px 900px at 20% 110%, rgba(122,84,44,.34), transparent 55%),
+    radial-gradient(1200px 800px at 85% 115%, rgba(96,64,32,.30), transparent 55%),
+    radial-gradient(1000px 600px at 50% -20%, rgba(70,48,26,.25), transparent 60%),
+    linear-gradient(180deg, #0b0906, #120d08 55%, #0a0806);
+    animation:breathe 14s ease-in-out infinite}
+  @keyframes breathe{0%,100%{filter:brightness(1)}50%{filter:brightness(1.14)}}
+  .veil{position:fixed; inset:0; background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(212,180,118,.12), transparent 60%),
+    linear-gradient(180deg, rgba(6,6,8,.55), rgba(6,6,8,.28) 40%, rgba(6,6,8,.66));}
+  #embers,#curvebg{position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none}
+  #curvebg{opacity:.55}
+  .bokeh{position:fixed; border-radius:50%; background:radial-gradient(circle, rgba(232,205,154,.5), transparent 70%);
+    filter:blur(14px); pointer-events:none; animation:bok 16s ease-in-out infinite}
+  @keyframes bok{0%,100%{transform:translateY(0) scale(1); opacity:.35}50%{transform:translateY(-34px) scale(1.15); opacity:.6}}
+  .grain{position:fixed; inset:0; opacity:.05; pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,.6) .5px, transparent .6px); background-size:3px 3px}
+  /* cadre */
+  .frame{position:fixed; inset:18px; border:1px solid rgba(212,180,118,.22); pointer-events:none}
+  .frame::before,.frame::after{content:""; position:absolute; width:26px; height:26px; border:1px solid var(--gold-dim)}
+  .frame::before{top:-1px; left:-1px; border-right:none; border-bottom:none}
+  .frame::after{bottom:-1px; right:-1px; border-left:none; border-top:none}
+  /* header */
+  header{position:fixed; top:40px; left:0; right:0; display:flex; align-items:baseline; justify-content:space-between; padding:0 64px; z-index:5}
+  .brand{font-family:var(--serif); font-size:clamp(22px,2.6vw,38px); letter-spacing:.22em; color:var(--ink)}
+  .brand em{font-style:normal; color:var(--gold2)}
+  .brand small{display:block; font-size:clamp(9px,.8vw,12px); letter-spacing:.5em; color:var(--ink3); margin-top:6px; font-family:inherit}
+  .hright{text-align:right}
+  #clock{font-family:var(--serif); font-size:clamp(20px,2.2vw,32px); color:var(--gold2); letter-spacing:.08em; font-variant-numeric:tabular-nums}
+  #maj{font-size:clamp(9px,.75vw,11px); color:var(--ink3); letter-spacing:.18em; margin-top:4px}
+  #maj i{font-style:normal; color:var(--jade)}
+  /* scènes */
+  .scene{position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    opacity:0; transform:scale(.985); transition:opacity 1.6s ease, transform 1.6s ease; pointer-events:none; padding:120px 64px 90px}
+  .scene.on{opacity:1; transform:scale(1)}
+  /* — scène TAUX — */
+  .board{width:min(1500px,92vw)}
+  .b-head{display:grid; grid-template-columns:2.2fr 1.2fr 1fr 1fr; gap:18px; padding:0 26px 14px;
+    font-size:clamp(9px,.8vw,12px); letter-spacing:.34em; color:var(--ink3)}
+  .b-head span:nth-child(3),.b-head span:nth-child(4){text-align:right}
+  .row{display:grid; grid-template-columns:2.2fr 1.2fr 1fr 1fr; gap:18px; align-items:center;
+    border:1px solid rgba(255,255,255,.06); border-radius:16px; padding:clamp(10px,1.4vh,20px) 26px; margin-bottom:12px;
+    background:linear-gradient(90deg, rgba(255,255,255,.025), rgba(212,180,118,.03));}
+  .r-name{display:flex; align-items:center; gap:16px}
+  .r-flag{font-size:clamp(20px,2vw,30px)}
+  .r-code{font-family:var(--serif); font-size:clamp(20px,2vw,30px); letter-spacing:.12em}
+  .r-code small{display:block; font-family:-apple-system,sans-serif; font-size:clamp(9px,.7vw,11px); color:var(--ink3); letter-spacing:.2em; margin-top:2px}
+  .spark{height:clamp(22px,3vh,34px); width:100%; max-width:220px; justify-self:start}
+  .r-buy,.r-sell{font-variant-numeric:tabular-nums; text-align:right; font-size:clamp(20px,2.1vw,32px); letter-spacing:.04em; transition:color .8s}
+  .r-buy{color:var(--ink2)} .r-sell{color:var(--gold2)}
+  .flash{color:var(--jade)!important}
+  /* — scène OR — */
+  .or-wrap{text-align:center}
+  .or-k{font-size:clamp(10px,1vw,14px); letter-spacing:.6em; color:var(--gold); margin-bottom:22px}
+  .or-t{font-family:var(--serif); font-size:clamp(54px,8vw,130px); letter-spacing:.06em; line-height:1;
+    background:linear-gradient(100deg,#8a713f 10%, #E8CD9A 35%, #fff2d0 50%, #E8CD9A 62%, #8a713f 90%);
+    -webkit-background-clip:text; background-clip:text; color:transparent; background-size:200% 100%;
+    animation:shimmer 5.5s linear infinite}
+  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  .or-price{margin-top:26px; font-family:var(--serif); font-size:clamp(34px,4.6vw,72px); color:var(--ink); font-variant-numeric:tabular-nums}
+  .or-price small{font-size:.4em; color:var(--ink2); letter-spacing:.2em}
+  .or-sub{margin-top:16px; font-size:clamp(11px,1vw,15px); color:var(--ink2); letter-spacing:.24em; font-weight:300}
+  .or-bar{margin:34px auto 0; width:min(520px,60vw); height:1px; background:linear-gradient(90deg, transparent, var(--gold), transparent); position:relative; overflow:visible}
+  .or-bar i{position:absolute; top:-2.5px; width:6px; height:6px; border-radius:50%; background:var(--gold2); box-shadow:0 0 14px var(--gold2); animation:orb 4.5s ease-in-out infinite}
+  @keyframes orb{0%,100%{left:6%}50%{left:92%}}
+  /* — scène MESSAGES — */
+  .msg-wrap{text-align:center; max-width:min(1100px,86vw)}
+  .msg{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(1100px,86vw);
+    opacity:0; transition:opacity 1.4s ease; text-align:center}
+  .msg.on{opacity:1}
+  .msg h2{font-family:var(--serif); font-size:clamp(34px,4.6vw,74px); line-height:1.18; letter-spacing:.03em; font-weight:400}
+  .msg h2 em{font-style:italic; color:var(--gold2)}
+  .msg p{margin-top:22px; font-size:clamp(12px,1.2vw,18px); color:var(--ink2); letter-spacing:.22em; font-weight:300}
+  /* ticker */
+  .ticker{position:fixed; bottom:34px; left:0; right:0; overflow:hidden; border-top:1px solid rgba(212,180,118,.16); padding-top:14px}
+  .tk{display:inline-block; white-space:nowrap; animation:tk 60s linear infinite;
+    font-size:clamp(11px,1vw,15px); letter-spacing:.16em; color:var(--ink2); font-variant-numeric:tabular-nums}
+  .tk b{color:var(--gold2); font-weight:500}
+  @keyframes tk{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  .foot{position:fixed; bottom:10px; left:0; right:0; text-align:center; font-size:9px; letter-spacing:.3em; color:var(--ink3)}
+  /* écran carré (LED 576×576) */
+  @media (max-aspect-ratio: 5/4){
+    header{top:26px; padding:0 34px}
+    .scene{padding:96px 30px 70px}
+    .row{grid-template-columns:1.6fr 1fr 1fr; gap:10px; padding:10px 16px}
+    .spark{display:none}
+    .b-head{grid-template-columns:1.6fr 1fr 1fr}
+    .b-head span:nth-child(2){display:none}
+    .r-code small{display:none}
+    .ticker{bottom:22px}
+  }
+</style>
+</head>
+<body>
+<div class="bronze"></div>
+<video id="bgv" loop muted autoplay playsinline></video>
+<svg id="curvebg" preserveAspectRatio="none"></svg>
+<canvas id="embers"></canvas>
+<div class="veil"></div><div class="grain"></div><div class="frame"></div>
+
+<header>
+  <div class="brand">HELVETICA <em>EXCHANGE</em><small>CHANGE &nbsp;&amp;&nbsp; OR &nbsp;·&nbsp; 19 RUE PIERRE-FATIO, GENÈVE</small></div>
+  <div class="hright"><div id="clock">—:—:—</div><div id="maj">TAUX INDICATIFS · <i id="age">—</i></div></div>
+</header>
+
+<section class="scene on" id="sc-taux">
+  <div class="board">
+    <div class="b-head"><span>DEVISE</span><span>TENDANCE</span><span>NOUS ACHETONS</span><span>NOUS VENDONS</span></div>
+    <div id="rows"></div>
+  </div>
+</section>
+
+<section class="scene" id="sc-or">
+  <div class="or-wrap">
+    <div class="or-k">OR FIN · LINGOTS &amp; PIÈCES</div>
+    <div class="or-t">OR 999.9</div>
+    <div class="or-price"><span id="orp">—</span> <small>CHF / GRAMME</small></div>
+    <div class="or-sub">ACHAT &nbsp;·&nbsp; VENTE &nbsp;·&nbsp; EXPERTISE SUR PLACE</div>
+    <div class="or-bar"><i></i></div>
+  </div>
+</section>
+
+<section class="scene" id="sc-msg">
+  <div class="msg on"><h2>Le taux vous plaît ?<br><em>Réservez-le.</em></h2><p>HELVETICAEXCHANGE.CH — RETRAIT EN BOUTIQUE OU LIVRAISON</p></div>
+  <div class="msg"><h2>Montants importants ?<br><em>Salon privé, sur rendez-vous.</em></h2><p>DISCRÉTION TOTALE · TAUX NÉGOCIÉS</p></div>
+  <div class="msg"><h2>Plus de <em>70 devises</em><br>en stock, maintenant.</h2><p>LUN–VEN 8H30–18H30 · SAM 9H–17H</p></div>
+</section>
+
+<div class="ticker"><div class="tk" id="tk"></div></div>
+<div class="foot">HELVETICA NEXUS · VITRINE — TAUX ACTUALISÉS AUTOMATIQUEMENT</div>
+
+<script>
+/* ── NEXUS VITRINE — même source de vérité que le site (lecture seule) ── */
+var SB='https://mgqfgevbtjsfoxjogvcq.supabase.co';
+var KEY='sb_publishable_GA-lHwr-eZ39N7FNX8u81w_wPnCXHpg';
+var VIDEO_URL='https://d8j0ntlcm91z4.cloudfront.net/user_3ERgVw54kAKIlamlv13ztgf54wD/hf_20260820_113001_85c4a57f-4681-4ea2-8059-300aceab7c8f.mp4';
+var MARGIN=0.022;
+var SNAP={EUR:0.9344,USD:0.8090,GBP:1.0906,AED:0.2203,JPY:0.00512,CAD:0.5792,TRY:0.01694,CNY:0.11973,XAU_G:88.4};
+var CUR=[['EUR','Euro','🇪🇺'],['USD','Dollar US','🇺🇸'],['GBP','Livre sterling','🇬🇧'],['AED','Dirham EAU','🇦🇪']];
+var mids={}, lastTs=0;
+for(var k in SNAP) mids[k]=SNAP[k];
+
+function fmt(v,d){ if(d===undefined)d=4; return v.toLocaleString('fr-CH',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+
+/* fond vidéo */
+(function(){ var v=document.getElementById('bgv');
+  if(VIDEO_URL && VIDEO_URL.indexOf('http')===0){ v.src=VIDEO_URL;
+    v.addEventListener('canplay',function(){ v.classList.add('on'); });
+    v.addEventListener('error',function(){ v.remove(); });
+  } else { v.remove(); } })();
+
+/* horloge */
+setInterval(function(){
+  document.getElementById('clock').textContent=new Intl.DateTimeFormat('fr-CH',{timeZone:'Europe/Zurich',hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(new Date());
+  var el=document.getElementById('age');
+  if(lastTs){ var m=Math.round((Date.now()-lastTs)/60000); el.textContent='MAJ IL Y A '+(m<1?'<1':m)+' MIN'; }
+  else el.textContent='SOURCE LOCALE';
+},1000);
+
+/* lignes du board */
+function spark(id){ var w=220,h=30,p='',i; for(i=0;i<=24;i++){ p+=(i? 'L':'M')+(i/24*w).toFixed(1)+' '+(h/2).toFixed(1)+' '; }
+  return '<svg class="spark" viewBox="0 0 '+w+' '+h+'"><path id="sp'+id+'" d="'+p+'" fill="none" stroke="rgba(212,180,118,.75)" stroke-width="1.6" stroke-linecap="round"/></svg>'; }
+(function(){ var host=document.getElementById('rows'),html='';
+  CUR.forEach(function(c,i){ html+='<div class="row"><div class="r-name"><span class="r-flag">'+c[2]+'</span><span class="r-code">'+c[0]+'<small>'+c[1]+'</small></span></div>'+spark(i)+
+  '<div class="r-buy" id="b'+c[0]+'">—</div><div class="r-sell" id="s'+c[0]+'">—</div></div>'; });
+  host.innerHTML=html; })();
+
+var hist={}; CUR.forEach(function(c){ hist[c[0]]=[]; });
+function paint(flash){
+  CUR.forEach(function(c,ci){ var m=mids[c[0]]; if(!m) return;
+    var b=document.getElementById('b'+c[0]), s=document.getElementById('s'+c[0]);
+    b.textContent=fmt(m*(1-MARGIN)); s.textContent=fmt(m*(1+MARGIN));
+    if(flash){ b.classList.add('flash'); s.classList.add('flash'); setTimeout(function(){b.classList.remove('flash');s.classList.remove('flash');},900); }
+    var arr=hist[c[0]]; arr.push(m); if(arr.length>25) arr.shift();
+    if(arr.length>2){ var mn=Math.min.apply(0,arr), mx=Math.max.apply(0,arr), w=220,h=30, d='';
+      arr.forEach(function(v,i){ var x=i/(arr.length-1)*w, y=h-4-((v-mn)/((mx-mn)||1))*(h-8); d+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' '; });
+      var sp=document.getElementById('sp'+ci); if(sp) sp.setAttribute('d',d); }
+  });
+  var g=mids.XAU_G; if(g) document.getElementById('orp').textContent=fmt(g,2);
+  var t=''; ['EUR','USD','GBP','AED','JPY','CAD','TRY','CNY'].forEach(function(k){ if(mids[k]) t+='<b>'+k+'</b> '+fmt(mids[k],k==='JPY'?5:4)+'  ·  '; });
+  t+='<b>OR</b> '+fmt(mids.XAU_G||0,2)+' CHF/g  ·  ';
+  document.getElementById('tk').innerHTML=t+t;
+}
+paint(false);
+
+/* respiration douce entre deux vraies mises à jour */
+setInterval(function(){ for(var k in mids){ mids[k]=mids[k]*(1+(Math.random()-.5)*0.0006); } paint(false); },3200);
+
+/* la vraie source : market_spots_v (lecture seule, même clé publique que le site) */
+function refresh(){
+  fetch(SB+'/rest/v1/market_spots_v?select=base,quote,mid,category,updated_at&quote=eq.CHF',{headers:{apikey:KEY,Authorization:'Bearer '+KEY}})
+  .then(function(r){return r.json();})
+  .then(function(rows){ if(!rows||!rows.length) return; var newest=0;
+    rows.forEach(function(r){ var t=new Date(r.updated_at).getTime(); if(t>newest) newest=t;
+      if(r.category==='fx' && r.mid>0) mids[r.base]=r.mid;
+      if(r.category==='metal' && (r.base==='XAU'||r.base==='GOLD') && r.mid>0) mids.XAU_G=r.mid/31.1034768; });
+    lastTs=newest; paint(true);
+  }).catch(function(){});
+}
+refresh(); setInterval(refresh, 5*60*1000);
+
+/* cycle des scènes : TAUX 22 s → OR 12 s → MESSAGES 10 s */
+var scenes=['sc-taux','sc-or','sc-msg'], durs=[22000,12000,10000], si=0;
+function cycle(){ scenes.forEach(function(id,i){ document.getElementById(id).classList.toggle('on', i===si); });
+  if(scenes[si]==='sc-msg') rotMsg();
+  setTimeout(function(){ si=(si+1)%scenes.length; cycle(); }, durs[si]); }
+var msgs=null, mi=0;
+function rotMsg(){ msgs=msgs||document.querySelectorAll('#sc-msg .msg');
+  msgs.forEach(function(m,i){ m.classList.toggle('on', i===mi); }); mi=(mi+1)%msgs.length; }
+cycle();
+
+/* ── braises d'or qui montent (le thème des panneaux, vivant) ── */
+(function(){
+  var cv=document.getElementById('embers'), ctx=cv.getContext('2d'), W,H,pts=[];
+  function rs(){ W=cv.width=innerWidth; H=cv.height=innerHeight; }
+  rs(); addEventListener('resize',rs);
+  for(var i=0;i<70;i++) pts.push({x:Math.random()*2000,y:Math.random()*1200,s:Math.random()*1.8+.4,v:Math.random()*.5+.12,tw:Math.random()*6.28,a:Math.random()*.5+.2});
+  (function tick(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<pts.length;i++){ var p=pts[i];
+      p.y-=p.v; p.tw+=.03; p.x+=Math.sin(p.tw)*.18;
+      if(p.y<-10){ p.y=H+10; p.x=Math.random()*W; }
+      var a=p.a*(0.55+0.45*Math.sin(p.tw*2));
+      ctx.beginPath(); ctx.arc(p.x%W, p.y, p.s, 0, 7);
+      ctx.fillStyle='rgba(232,205,154,'+a.toFixed(3)+')';
+      ctx.shadowColor='rgba(212,180,118,.8)'; ctx.shadowBlur=6; ctx.fill(); ctx.shadowBlur=0;
+    }
+    requestAnimationFrame(tick);
+  })();
+  /* bokeh dorés en bas */
+  for(var b=0;b<7;b++){ var d=document.createElement('div'); d.className='bokeh';
+    var sz=40+Math.random()*90;
+    d.style.width=d.style.height=sz+'px';
+    d.style.left=(Math.random()*94)+'vw'; d.style.bottom=(Math.random()*16-4)+'vh';
+    d.style.animationDelay=(Math.random()*12)+'s';
+    document.body.appendChild(d); }
+})();
+
+/* ── la courbe du cours qui se dessine, avec flèche lumineuse ── */
+(function(){
+  var svg=document.getElementById('curvebg');
+  svg.setAttribute('viewBox','0 0 1000 560');
+  svg.innerHTML='<defs><linearGradient id="cg" x1="0" y1="0" x2="1" y2="0">'+
+    '<stop offset="0" stop-color="rgba(212,180,118,0)"/><stop offset=".55" stop-color="rgba(212,180,118,.55)"/>'+
+    '<stop offset="1" stop-color="#F4E3BC"/></linearGradient>'+
+    '<filter id="gl"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'+
+    '<path id="cpath" fill="none" stroke="url(#cg)" stroke-width="2.4" filter="url(#gl)" stroke-linecap="round"/>'+
+    '<polygon id="ctip" points="0,-7 14,0 0,7" fill="#F4E3BC" filter="url(#gl)"/>';
+  var path=document.getElementById('cpath'), tip=document.getElementById('ctip');
+  function newCurve(){
+    var pts=[], x, y=430+Math.random()*60;
+    for(x=0;x<=1000;x+=50){
+      y=Math.max(120, Math.min(520, y-(x/1000)*22+(Math.random()-.42)*46));
+      pts.push([x,y]);
+    }
+    var d='M '+pts[0][0]+' '+pts[0][1];
+    for(var i=1;i<pts.length;i++){
+      var mx=(pts[i-1][0]+pts[i][0])/2;
+      d+=' Q '+pts[i-1][0]+' '+pts[i-1][1]+' '+mx+' '+((pts[i-1][1]+pts[i][1])/2);
+    }
+    d+=' T '+pts[pts.length-1][0]+' '+pts[pts.length-1][1];
+    path.setAttribute('d',d);
+    var L=path.getTotalLength();
+    path.style.strokeDasharray=L; path.style.strokeDashoffset=L;
+    var t0=null, DUR=11000;
+    function step(ts){ if(!t0)t0=ts; var k=Math.min(1,(ts-t0)/DUR);
+      var e=1-Math.pow(1-k,2.2);
+      path.style.strokeDashoffset=L*(1-e);
+      var pt=path.getPointAtLength(L*e), pt2=path.getPointAtLength(Math.max(0,L*e-2));
+      var ang=Math.atan2(pt.y-pt2.y, pt.x-pt2.x)*180/Math.PI;
+      tip.setAttribute('transform','translate('+pt.x+' '+pt.y+') rotate('+ang+')');
+      if(k<1) requestAnimationFrame(step);
+      else setTimeout(function(){ path.style.transition='opacity 1.4s'; path.style.opacity=0; tip.style.opacity=0;
+        setTimeout(function(){ path.style.transition=''; path.style.opacity=1; tip.style.opacity=1; newCurve(); },1500); },2600);
+    }
+    requestAnimationFrame(step);
+  }
+  newCurve();
+})();
+
+/* double-clic = plein écran (écran boutique) */
+document.addEventListener('dblclick',function(){ var d=document.documentElement;
+  document.fullscreenElement ? document.exitFullscreen() : d.requestFullscreen().catch(function(){}); });
+</script>
+</body>
+</html>
