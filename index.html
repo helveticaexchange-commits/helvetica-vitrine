@@ -297,6 +297,17 @@ if (DIAG){
 }
 function fit(){
   if (FORCE > 0){
+    var s2 = FORCE/2100;
+    if ('zoom' in stage.style && !/[?&]notzoom=1/.test(location.search)){
+      /* voie LED : zoom = réduction au niveau du layout, AUCUNE couche
+         de composition transformée (le moteur du lecteur les décale).
+         Le mappage 1:1 prouvé par la grille ?diag=1 s'applique tel quel. */
+      stage.style.transform = 'none';
+      stage.style.left = '0'; stage.style.top = '0';
+      stage.style.marginLeft = '0'; stage.style.marginTop = '0';
+      stage.style.zoom = s2;
+      return;
+    }
     if (OX !== null || OY !== null){
       /* position absolue dictée par l'URL (?ox=&oy=) — compensation mesurée */
       stage.style.left = (OX||0) + 'px'; stage.style.top = (OY||0) + 'px';
