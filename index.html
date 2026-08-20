@@ -18,9 +18,9 @@ html,body{width:100%;height:100%;background:#241505;overflow:hidden}
 body{font-family:'Didot','Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif;
   -webkit-font-smoothing:antialiased;cursor:none}
 #fit{position:fixed;inset:0;display:block;background:#241505}
-#stage{position:absolute;left:50%;top:50%;width:2100px;height:2100px;
-  transform:translate(-50%,-50%) scale(.274286); /* secours sans JS : parfait sur 576×576 */
-  transform-origin:center center;overflow:hidden;
+#stage{position:absolute;left:0;top:0;width:2100px;height:2100px;
+  transform:scale(.274286); /* secours sans JS : cale un 576×576 net en haut-gauche */
+  transform-origin:0 0;overflow:hidden;
   background:
     radial-gradient(1500px 1100px at 50% -8%, rgba(255,196,90,.32), rgba(255,196,90,0) 62%),
     radial-gradient(1900px 1500px at 50% 46%, #6b4519 0%, #53340f 44%, #3a2308 74%, #2a1806 100%);
@@ -259,12 +259,27 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
 
 /* ── mise à l'échelle : scène 2100×2100 → n'importe quel écran ── */
 var stage = document.getElementById('stage');
+/* MODE FORCÉ LED : …?px=576 → rendu calé en haut-gauche, échelle fixe.
+   Immunisé contre les lecteurs dont le navigateur interne ment sur sa
+   taille (viewport ~980 px des WebView Novastar/Android). */
+var FORCE = (function(){
+  var m = /[?&]px=(\d+)/.exec(location.search);
+  return m ? parseInt(m[1], 10) : 0;
+})();
 function fit(){
+  if (FORCE > 0){
+    stage.style.left = '0'; stage.style.top = '0';
+    stage.style.transformOrigin = '0 0';
+    stage.style.transform = 'scale(' + (FORCE/2100) + ')';
+    return;
+  }
   var W = window.innerWidth || document.documentElement.clientWidth || 576;
   var H = window.innerHeight || document.documentElement.clientHeight || 576;
   var s = Math.min(W/2100, H/2100);
   if (!(s > 0)) s = 576/2100;
   if ('transform' in stage.style){
+    stage.style.left = '50%'; stage.style.top = '50%';
+    stage.style.transformOrigin = 'center center';
     stage.style.transform = 'translate(-50%,-50%) scale(' + s + ')';
   } else {                                   /* très vieux navigateur embarqué */
     stage.style.zoom = s; stage.style.left = '0'; stage.style.top = '0';
