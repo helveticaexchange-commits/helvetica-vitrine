@@ -4,14 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=576,initial-scale=1,user-scalable=no">
 <meta name="robots" content="noindex">
-<title>HELVETICA EXCHANGE · Vitrine LED</title>
+<title>HELVETICA EXCHANGE · Vitrine LED v2 Panneau</title>
 <style>
 /* ═══════════════════════════════════════════════════════════════
-   HELVETICA EXCHANGE · VITRINE v4 « LED EDITION » · 20.08.2026
-   Scène fixe 2100×2100 (écran LED → 576×576) · bronze & or éclatants
-   Taux ACHAT/VENTE = programme DARIC (rateboard_public, palier
-   « affiché » = taux Lyland) · Interbancaire live · Or & Argent live
-   Lecture seule — aucun objet Daric modifié.
+   HELVETICA EXCHANGE · VITRINE v2 « PANNEAU » · 20.08.2026
+   Version séparée de la v1 (qui reste la référence par défaut).
+   ACHAT en VERT · VENTE en ROUGE (palette des panneaux physiques),
+   première page épurée (sans colonne interbancaire), animations
+   apaisées, page de bienvenue multilingue (11 langues, une page).
+   Données identiques v1 : DARIC rateboard_public (lecture seule).
    ═══════════════════════════════════════════════════════════════ */
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;height:100%;background:#241505;overflow:hidden}
@@ -37,11 +38,11 @@ body{font-family:'Didot','Playfair Display','Cormorant Garamond',Georgia,'Times 
 .beam{position:absolute;top:-25%;height:150%;width:460px;pointer-events:none;mix-blend-mode:screen;
   background:linear-gradient(100deg, rgba(255,214,106,0), rgba(255,214,106,.16) 45%, rgba(255,240,190,.30) 50%, rgba(255,214,106,.16) 55%, rgba(255,214,106,0));
   filter:blur(6px)}
-#beamA{left:-400px;animation:sweep 17s linear infinite}
-#beamB{left:-400px;width:260px;opacity:.75;animation:sweep 23s linear infinite 6s}
+#beamA{left:-400px;opacity:.45;animation:sweep 26s linear infinite}
+#beamB{left:-400px;width:260px;opacity:.3;animation:sweep 34s linear infinite 9s}
 @keyframes sweep{0%{transform:translateX(-200px) rotate(8deg)}100%{transform:translateX(2900px) rotate(8deg)}}
 canvas#fxc{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-svg#curve{position:absolute;left:0;right:0;top:990px;width:2100px;height:760px;pointer-events:none;opacity:.5}
+svg#curve{position:absolute;left:0;right:0;top:990px;width:2100px;height:760px;pointer-events:none;opacity:.22}
 /* ── cadre or ── */
 .frame{position:absolute;inset:34px;border:3px solid rgba(255,214,106,.55);pointer-events:none;
   box-shadow:0 0 60px rgba(255,190,80,.28) inset, 0 0 40px rgba(255,190,80,.22)}
@@ -74,27 +75,29 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
 .sc{position:absolute;inset:0;opacity:0;transform:scale(.982);transition:opacity 1.15s ease,transform 1.15s ease;
   pointer-events:none;display:flex;flex-direction:column}
 .sc.on{opacity:1;transform:scale(1)}
-/* ── scène TAUX ── */
-.cols{display:grid;grid-template-columns:620px 1fr 1fr 1fr;align-items:end;padding:0 26px 20px;gap:0 30px}
-.cols div{font-size:42px;letter-spacing:.18em;color:#ffd76a;font-family:Georgia,serif;text-transform:uppercase;
+/* ── scène TAUX — épurée : DEVISE | ACHAT vert | VENTE rouge ── */
+.cols{display:grid;grid-template-columns:660px 1fr 1fr;align-items:end;padding:0 26px 22px;gap:0 40px}
+.cols div{font-size:46px;letter-spacing:.18em;color:#ffd76a;font-family:Georgia,serif;text-transform:uppercase;
   text-shadow:0 0 20px rgba(255,190,80,.5);text-align:right;line-height:1.25}
 .cols div:first-child{text-align:left}
-.cols small{display:block;font-size:28px;letter-spacing:.22em;color:#dfae62}
+.cols small{display:block;font-size:30px;letter-spacing:.22em;color:#dfae62}
+.cols .hb{color:#9fe89b;text-shadow:0 0 22px rgba(120,230,120,.5)}
+.cols .hb small{color:#7dc27a}
+.cols .hs{color:#ff9187;text-shadow:0 0 22px rgba(255,110,90,.5)}
+.cols .hs small{color:#d98079}
 #rows{flex:1;display:flex;flex-direction:column;justify-content:space-evenly}
-.row{display:grid;grid-template-columns:620px 1fr 1fr 1fr;align-items:center;gap:0 30px;
+.row{display:grid;grid-template-columns:660px 1fr 1fr;align-items:center;gap:0 40px;
   padding:12px 26px;position:relative}
 .row:not(:last-child):after{content:'';position:absolute;left:20px;right:20px;bottom:-2px;height:2px;
-  background:linear-gradient(90deg,transparent,rgba(255,214,106,.5),transparent)}
+  background:linear-gradient(90deg,transparent,rgba(255,214,106,.42),transparent)}
 .dev{display:flex;align-items:center;gap:32px}
 .flag{font-size:95px;line-height:1;filter:drop-shadow(0 3px 14px rgba(0,0,0,.45))}
-.code{font-size:90px;color:#fff0c0;letter-spacing:.05em;font-weight:600;
+.code{font-size:92px;color:#fff0c0;letter-spacing:.05em;font-weight:600;
   text-shadow:0 0 30px rgba(255,200,80,.55)}
 .nm{font-size:32px;color:#e8c078;letter-spacing:.09em;font-family:Georgia,serif;margin-top:6px;white-space:nowrap}
-.mid{font-size:58px;color:#dfae62;text-align:right;font-variant-numeric:tabular-nums;
-  text-shadow:0 0 16px rgba(223,174,98,.45)}
-.buy,.sell{font-size:112px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;line-height:1;
-  color:#ffe9a8;text-shadow:0 0 40px rgba(255,205,90,.7),0 3px 6px rgba(0,0,0,.35)}
-.sell{color:#ffd76a}
+.buy,.sell{font-size:132px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;line-height:1;
+  color:#8ef08a;text-shadow:0 0 44px rgba(110,230,110,.6),0 3px 6px rgba(0,0,0,.4)}
+.sell{color:#ff6357;text-shadow:0 0 44px rgba(255,90,70,.6),0 3px 6px rgba(0,0,0,.4)}
 .chg{animation:pulse 1.6s ease}
 @keyframes pulse{0%{filter:brightness(1)}25%{filter:brightness(1.75)}100%{filter:brightness(1)}}
 /* ── scène OR & ARGENT ── */
@@ -127,13 +130,17 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
   background:linear-gradient(0deg,rgba(30,16,4,.88),rgba(30,16,4,0));z-index:2}
 #mcap .t{font-size:72px;color:#fff0c0;letter-spacing:.16em;text-shadow:0 0 36px rgba(255,200,80,.7)}
 #sc-media .mveil{position:absolute;inset:0;box-shadow:0 0 0 6px rgba(255,214,106,.5) inset;z-index:2}
-/* ── scène MESSAGE ── */
+/* ── scène BIENVENUE multilingue (une seule page, 11 langues) ── */
 #sc-msg{align-items:center;justify-content:center;text-align:center}
-#msg-line{max-width:1720px;font-size:103px;line-height:1.32;color:#fff0c0;
-  text-shadow:0 0 46px rgba(255,200,80,.6)}
-#msg-sub{margin-top:50px;font-size:46px;letter-spacing:.4em;color:#ffd76a;font-family:Georgia,serif;text-transform:uppercase}
-.mrule{width:560px;height:2.5px;margin:52px auto 0;
+.wttl{font-size:112px;line-height:1.1;color:#fff0c0;letter-spacing:.06em;
+  text-shadow:0 0 50px rgba(255,200,80,.7)}
+.mrule{width:560px;height:2.5px;margin:44px auto;
   background:linear-gradient(90deg,transparent,#ffd76a,transparent);box-shadow:0 0 18px rgba(255,200,80,.55)}
+.wgrid{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;
+  gap:34px 74px;max-width:1780px;margin:0 auto}
+.wgrid span{font-size:66px;line-height:1.25;color:#ffe2a0;
+  text-shadow:0 0 26px rgba(255,190,80,.45);white-space:nowrap}
+.wgrid span.acc{color:#ffd76a;font-size:72px}
 /* ── ruban défilant ── */
 #tickw{position:absolute;left:0;right:0;bottom:298px;height:118px;z-index:6;overflow:hidden;
   border-top:2.5px solid rgba(255,214,106,.55);border-bottom:2.5px solid rgba(255,214,106,.55);
@@ -186,16 +193,15 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
     <section class="sc on" id="sc-rates">
       <div class="cols">
         <div>Devise<small>Currency</small></div>
-        <div>Interbancaire<small>Live</small></div>
-        <div>Nous achetons<small>We buy</small></div>
-        <div>Nous vendons<small>We sell</small></div>
+        <div class="hb">Nous achetons<small>We buy</small></div>
+        <div class="hs">Nous vendons<small>We sell</small></div>
       </div>
       <div id="rows">
-        <div class="row"><div class="dev"><span class="flag">🇪🇺</span><span><span class="code">EUR</span><div class="nm">Euro</div></span></div><div class="mid">0.9329</div><div class="buy">0.9140</div><div class="sell">0.9500</div></div>
-        <div class="row"><div class="dev"><span class="flag">🇺🇸</span><span><span class="code">USD</span><div class="nm">Dollar US</div></span></div><div class="mid">0.7985</div><div class="buy">0.7720</div><div class="sell">0.8180</div></div>
-        <div class="row"><div class="dev"><span class="flag">🇬🇧</span><span><span class="code">GBP</span><div class="nm">Livre sterling</div></span></div><div class="mid">1.0890</div><div class="buy">1.0550</div><div class="sell">1.1250</div></div>
-        <div class="row"><div class="dev"><span class="flag">🇯🇵</span><span><span class="code">JPY</span><div class="nm">Yen · pour 100</div></span></div><div class="mid">0.5031</div><div class="buy">0.4820</div><div class="sell">0.5330</div></div>
-        <div class="row"><div class="dev"><span class="flag">🇨🇦</span><span><span class="code">CAD</span><div class="nm">Dollar canadien</div></span></div><div class="mid">0.5797</div><div class="buy">0.5520</div><div class="sell">0.6080</div></div>
+        <div class="row"><div class="dev"><span class="flag">🇪🇺</span><span><span class="code">EUR</span><div class="nm">Euro</div></span></div><div class="buy">0.9140</div><div class="sell">0.9500</div></div>
+        <div class="row"><div class="dev"><span class="flag">🇺🇸</span><span><span class="code">USD</span><div class="nm">Dollar US</div></span></div><div class="buy">0.7720</div><div class="sell">0.8180</div></div>
+        <div class="row"><div class="dev"><span class="flag">🇬🇧</span><span><span class="code">GBP</span><div class="nm">Livre sterling</div></span></div><div class="buy">1.0550</div><div class="sell">1.1250</div></div>
+        <div class="row"><div class="dev"><span class="flag">🇯🇵</span><span><span class="code">JPY</span><div class="nm">Yen · pour 100</div></span></div><div class="buy">0.4820</div><div class="sell">0.5330</div></div>
+        <div class="row"><div class="dev"><span class="flag">🇨🇦</span><span><span class="code">CAD</span><div class="nm">Dollar canadien</div></span></div><div class="buy">0.5520</div><div class="sell">0.6080</div></div>
       </div>
     </section>
 
@@ -224,11 +230,24 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
       <div id="mcap"><div class="t"></div></div>
     </section>
 
-    <!-- MESSAGES -->
+    <!-- BIENVENUE · 11 LANGUES · UNE PAGE -->
     <section class="sc" id="sc-msg">
-      <div id="msg-line"></div>
+      <div class="wttl">Bienvenue · Welcome</div>
       <div class="mrule"></div>
-      <div id="msg-sub"></div>
+      <div class="wgrid">
+        <span>Willkommen</span>
+        <span>Benvenuti</span>
+        <span>Bienvenidos</span>
+        <span class="acc">خوش آمدید</span>
+        <span class="acc">أهلاً وسهلاً</span>
+        <span>Добро пожаловать</span>
+        <span class="acc">ようこそ</span>
+        <span class="acc">欢迎光临</span>
+        <span class="acc">ברוכים הבאים</span>
+        <span>Hoş geldiniz</span>
+      </div>
+      <div class="mrule"></div>
+      <div class="wttl" style="font-size:64px;letter-spacing:.3em;color:#ffd76a">HELVETICA EXCHANGE · GENÈVE</div>
     </section>
   </main>
 
@@ -266,9 +285,7 @@ var FORCE = (function(){
   var m = /[?&]px=(\d+)/.exec(location.search);
   return m ? parseInt(m[1], 10) : 0;
 })();
-/* MODE ÉCONOMIE D'EFFETS — automatique sur le lecteur LED (?px=…),
-   ?fx=hi pour retrouver tous les effets. Supprime les flous temps réel
-   et réduit le canevas : mêmes visuels à 576 px, ~10× moins de calcul. */
+/* MODE ÉCONOMIE D'EFFETS — automatique sur le lecteur LED (?px=…), ?fx=hi pour tout réactiver */
 var LOWFX = (function(){ return /[?&]px=\d+/.test(location.search) && !/[?&]fx=hi/.test(location.search); })();
 if (LOWFX){
   var st0=document.createElement('style');
@@ -400,11 +417,10 @@ function renderBoard(){
     var c=CUR[i], d=model.fx[c[0]]; if(!d) continue;
     var u = d.u||1;
     var row=document.createElement('div'); row.className='row';
-    var mid=f4(d.mid*u), buy=f4(d.a*u), sell=f4(d.v*u);
+    var buy=f4(d.a*u), sell=f4(d.v*u);
     row.innerHTML =
       '<div class="dev"><span class="flag">'+c[2]+'</span><span><span class="code">'+c[0]+'</span>'+
       '<div class="nm">'+c[1]+'</div></span></div>'+
-      '<div class="mid">'+mid+'</div>'+
       '<div class="buy" id="b-'+c[0]+'">'+buy+'</div>'+
       '<div class="sell" id="s-'+c[0]+'">'+sell+'</div>';
     host.appendChild(row);
@@ -502,9 +518,9 @@ function applySnap(){
   renderBoard();
 }
 /* mémoire de secours — uniquement pour coupure internet */
-function saveCache(){ try{ localStorage.setItem('hx_v4', JSON.stringify(model)); }catch(e){} }
+function saveCache(){ try{ localStorage.setItem('hx_v2', JSON.stringify(model)); }catch(e){} }
 function loadCache(){
-  try{ var s=localStorage.getItem('hx_v4'); if(!s) return false;
+  try{ var s=localStorage.getItem('hx_v2'); if(!s) return false;
     var m=JSON.parse(s); if(!m||!m.all||!m.all.length) return false;
     m.live=false; model=m; renderBoard(); return true; }catch(e){ return false; }
 }
@@ -523,12 +539,12 @@ function clock(){
 }
 clock(); setInterval(clock,5000);
 
-/* ── braises d'or (mode éco : petit canevas + halo pré-calculé) ── */
+/* ── braises d'or, discrètes (mode éco : petit canevas + halo pré-calculé) ── */
 (function(){
   var cv=document.getElementById('fxc'), ctx=cv.getContext('2d');
   var S = LOWFX ? (FORCE||576) : 2100, k = S/2100;
   cv.width=S; cv.height=S;
-  var N = LOWFX ? 30 : 92, P=[], i, spr=null;
+  var N = LOWFX ? 24 : 42, P=[], i, spr=null;
   if (LOWFX){
     spr=document.createElement('canvas'); spr.width=24; spr.height=24;
     var sc2=spr.getContext('2d'), g2=sc2.createRadialGradient(12,12,0,12,12,12);
@@ -537,8 +553,8 @@ clock(); setInterval(clock,5000);
     sc2.fillStyle=g2; sc2.fillRect(0,0,24,24);
   }
   function mk(y){ return {x:Math.random()*S, y:(y===undefined? Math.random()*S : y),
-    r:(2+Math.random()*5.5)*k, s:Math.max(.09,(.25+Math.random()*.8)*k), d:(Math.random()-.5)*.5*k,
-    a:.35+Math.random()*.6, tw:Math.random()*6.28}; }
+    r:(2+Math.random()*4.5)*k, s:Math.max(.07,(.18+Math.random()*.55)*k), d:(Math.random()-.5)*.35*k,
+    a:.2+Math.random()*.4, tw:Math.random()*6.28}; }
   for(i=0;i<N;i++) P.push(mk());
   function step(){
     ctx.clearRect(0,0,S,S);
@@ -599,21 +615,10 @@ clock(); setInterval(clock,5000);
 var MEDIA=[
   {type:'image', dur:11, cap:'OR · ACHAT & VENTE',
    url:'https://d8j0ntlcm91z4.cloudfront.net/user_3ERgVw54kAKIlamlv13ztgf54wD/hf_20260820_115617_b8f2e818-0a19-469e-b424-c8d5ffe5bd8d.png'},
-  {type:'video', dur:12, cap:'OR FIN 999.9 · HELVETICA EXCHANGE',
+  {type:'video', dur:11, cap:'OR FIN 999.9 · HELVETICA EXCHANGE',
    url:'https://d8j0ntlcm91z4.cloudfront.net/user_3ERgVw54kAKIlamlv13ztgf54wD/hf_20260820_113001_85c4a57f-4681-4ea2-8059-300aceab7c8f.mp4'}
 ];
 var mIdx=0, mediaOk={};
-
-/* ── messages ── */
-var M=[
-  ['Bienvenue chez Helvetica Exchange','WELCOME · WILLKOMMEN · خوش آمدید'],
-  ['Or d’investissement · Achat & Vente','INVESTMENT GOLD · BUY & SELL'],
-  ['Plus de 70 devises disponibles','OVER 70 CURRENCIES AVAILABLE'],
-  ['Les meilleurs taux de Genève','BEST RATES IN GENEVA · BESTE KURSE'],
-  ['صرافی هلوتیکا · خرید و فروش ارز و طلا','HELVETICA EXCHANGE · GENÈVE'],
-  ['Discrétion · Sécurité · Excellence','SWISS PRIVATE SERVICE']
-];
-var msgIdx=0;
 
 /* ── moteur de scènes ── */
 var SC={rates:document.getElementById('sc-rates'), gold:document.getElementById('sc-gold'),
@@ -636,22 +641,18 @@ function playMedia(m){
     var pr=vd.play(); if(pr&&pr.catch) pr.catch(function(){});
   }
 }
-function nextMsg(){
-  var m=M[msgIdx%M.length]; msgIdx++;
-  document.getElementById('msg-line').textContent=m[0];
-  document.getElementById('msg-sub').textContent=m[1];
-}
 function cycle(){
+  /* tour complet calé sur 60 s pile : taux 25 + or 12 + média 11 + bienvenue 12
+     (sans média : taux 25 + or 12 + bienvenue 12 = 49 s) */
   var m=MEDIA.length? MEDIA[mIdx%MEDIA.length] : null;
   var useMedia = m && mediaOk[m.url]!==false;
-  var seq=[['rates',28000],['gold',16000]];
-  if(useMedia) seq.push(['media',m.dur*1000]);
-  seq.push(['msg',10000]);
+  var seq=[['rates',25000],['gold',12000]];
+  if(useMedia) seq.push(['media',11000]);
+  seq.push(['msg',12000]);
   var i=0;
   (function nx(){
     var s=seq[i%seq.length];
     if(s[0]==='media'){ playMedia(m); }
-    if(s[0]==='msg'){ nextMsg(); }
     show(s[0]);
     i++;
     if(i>=seq.length){ mIdx++; setTimeout(cycle, s[1]); }
