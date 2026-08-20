@@ -266,14 +266,48 @@ var FORCE = (function(){
   var m = /[?&]px=(\d+)/.exec(location.search);
   return m ? parseInt(m[1], 10) : 0;
 })();
+var OX = (function(){ var m = /[?&]ox=(-?\d+)/.exec(location.search); return m ? parseInt(m[1],10) : null; })();
+var OY = (function(){ var m = /[?&]oy=(-?\d+)/.exec(location.search); return m ? parseInt(m[1],10) : null; })();
+/* ?vp=N réécrit le viewport (utile si le lecteur alloue une surface plus large) */
+(function(){ var m = /[?&]vp=(\d+)/.exec(location.search);
+  if(m){ var mv=document.querySelector('meta[name=viewport]');
+    if(mv) mv.setAttribute('content','width='+m[1]+',initial-scale=1,user-scalable=no'); }
+})();
+/* ═ MODE DIAGNOSTIC ?diag=1 : grille de coordonnées pour mesurer le mappage du lecteur ═ */
+var DIAG = /[?&]diag=1/.test(location.search);
+if (DIAG){
+  document.getElementById('fit').style.display='none';
+  var dg=document.createElement('div');
+  dg.style.cssText='position:absolute;left:0;top:0;width:3000px;height:3000px;background:#241505;z-index:99';
+  var h='', g;
+  for(g=0; g<=3000; g+=100){
+    h+='<div style="position:absolute;left:'+g+'px;top:0;width:'+(g%500===0?4:2)+'px;height:3000px;background:'+(g%500===0?'#ffd76a':'#7a5426')+'"></div>';
+    h+='<div style="position:absolute;top:'+g+'px;left:0;height:'+(g%500===0?4:2)+'px;width:3000px;background:'+(g%500===0?'#ffd76a':'#7a5426')+'"></div>';
+  }
+  var lx, ly;
+  for(lx=0; lx<=2800; lx+=200){ for(ly=0; ly<=2800; ly+=200){
+    h+='<div style="position:absolute;left:'+(lx+8)+'px;top:'+(ly+6)+'px;font:700 26px Georgia;color:#fff0c0">'+lx+','+ly+'</div>';
+  }}
+  var vwtxt=(window.innerWidth||0)+'x'+(window.innerHeight||0)+' r'+(Math.round((window.devicePixelRatio||1)*100)/100);
+  var spots=[[16,56],[236,246],[456,446],[736,646],[16,446]], si;
+  for(si=0; si<spots.length; si++){
+    h+='<div style="position:absolute;left:'+spots[si][0]+'px;top:'+spots[si][1]+'px;font:700 44px Georgia;color:#ff7a6a;text-shadow:0 0 8px #000">'+vwtxt+'</div>';
+  }
+  dg.innerHTML=h; document.body.appendChild(dg);
+}
 function fit(){
   if (FORCE > 0){
-    /* centrage par marges fixes : sur une surface FORCE×FORCE → plein cadre à 0,0 ;
-       sur une surface interne plus grande (ex. 1024×1024 recadrée au centre par le
-       lecteur) → pile au centre. Aucun pourcentage de transform, aucune mesure JS. */
-    stage.style.left = '50%'; stage.style.top = '50%';
-    stage.style.marginLeft = '-' + (FORCE/2) + 'px';
-    stage.style.marginTop  = '-' + (FORCE/2) + 'px';
+    if (OX !== null || OY !== null){
+      /* position absolue dictée par l'URL (?ox=&oy=) — compensation mesurée */
+      stage.style.left = (OX||0) + 'px'; stage.style.top = (OY||0) + 'px';
+      stage.style.marginLeft = '0'; stage.style.marginTop = '0';
+    } else {
+      /* centrage par marges fixes : plein cadre sur surface FORCE×FORCE,
+         pile au centre sur une surface plus large. Aucun pourcentage de transform. */
+      stage.style.left = '50%'; stage.style.top = '50%';
+      stage.style.marginLeft = '-' + (FORCE/2) + 'px';
+      stage.style.marginTop  = '-' + (FORCE/2) + 'px';
+    }
     stage.style.transformOrigin = '0 0';
     stage.style.transform = 'scale(' + (FORCE/2100) + ')';
     return;
