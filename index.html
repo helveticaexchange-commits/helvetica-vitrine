@@ -85,7 +85,8 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
   padding:12px 26px;position:relative}
 .row:not(:last-child):after{content:'';position:absolute;left:20px;right:20px;bottom:-2px;height:2px;
   background:linear-gradient(90deg,transparent,rgba(255,214,106,.5),transparent)}
-.dev{display:flex;align-items:center;gap:32px}
+.dev{display:flex;align-items:center}
+.dev .flag{margin-right:32px}
 .flag{font-size:95px;line-height:1;filter:drop-shadow(0 3px 14px rgba(0,0,0,.45))}
 .code{font-size:90px;color:#fff0c0;letter-spacing:.05em;font-weight:600;
   text-shadow:0 0 30px rgba(255,200,80,.55)}
@@ -106,13 +107,15 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
   -webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 6px 40px rgba(255,195,70,.55))}
 .gunit{font-size:50px;color:#e8c078;letter-spacing:.3em;margin-top:8px;font-family:Georgia,serif}
-.gline{display:flex;gap:120px;justify-content:center;margin-top:50px}
+.gline{display:flex;justify-content:center;margin-top:50px}
+.gline>div{margin:0 60px}
 .gline b{display:block;font-size:84px;color:#ffe9a8;font-weight:600;font-variant-numeric:tabular-nums;
   text-shadow:0 0 30px rgba(255,205,90,.6)}
 .gline span{display:block;font-size:36px;color:#dfae62;letter-spacing:.28em;margin-top:12px;font-family:Georgia,serif}
 .gsep{width:760px;height:2.5px;margin:54px auto 0;
   background:linear-gradient(90deg,transparent,#ffd76a,transparent);box-shadow:0 0 20px rgba(255,200,80,.6)}
-.arg{display:flex;gap:52px;align-items:baseline;justify-content:center;margin-top:40px}
+.arg{display:flex;align-items:baseline;justify-content:center;margin-top:40px}
+.arg>*{margin:0 18px}
 .arg .t{font-size:62px;color:#f2f2f0;letter-spacing:.18em;text-shadow:0 0 26px rgba(240,240,240,.4)}
 .arg b{font-size:92px;color:#f5f0e2;font-weight:600;font-variant-numeric:tabular-nums;
   text-shadow:0 0 34px rgba(240,230,200,.5)}
@@ -147,8 +150,9 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
 /* ── pied ── */
 footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-align:center}
 .faddr{font-size:46px;letter-spacing:.28em;color:#ffe2a0;font-family:Georgia,serif;text-shadow:0 0 22px rgba(255,190,80,.5)}
-.fsub{margin-top:26px;display:flex;justify-content:center;align-items:center;gap:34px;
+.fsub{margin-top:26px;display:flex;justify-content:center;align-items:center;
   font-size:37px;letter-spacing:.2em;color:#dfae62;font-family:Georgia,serif}
+.fsub>*{margin:0 17px}
 .dot{width:26px;height:26px;border-radius:50%;background:#ffd76a;box-shadow:0 0 22px #ffcf5e;animation:blink 2.1s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
 </style>
@@ -458,12 +462,20 @@ function renderTicker(){
 
 /* ── chargement DARIC (VPS) ── */
 function applyValue(v, tsIso){
+  /* CANARI EUR : si l'euro du payload est aberrant (épisode ×8 constaté le 20.08
+     au soir sur le rateboard), on REJETTE tout le payload et on garde les
+     derniers taux sains. Jamais de taux fous en vitrine. */
+  var eur = v.fx && v.fx.EUR && v.fx.EUR.tiers && v.fx.EUR.tiers.affiche;
+  if (!eur || !(+eur.achat>0.5 && +eur.achat<1.5 && +eur.vente>0.5 && +eur.vente<1.5)) return;
   var m={fx:{}, all:[], ts:tsIso||new Date().toISOString(), live:true};
   var fx=v.fx||{}, code, d;
   for (code in fx){
     d=fx[code]; if(!d||!d.tiers||!d.tiers.affiche) continue;
-    m.fx[code]={mid:+d.mid, u:+(d.unit||1), a:+d.tiers.affiche.achat, v:+d.tiers.affiche.vente};
-    m.all.push([code, +d.mid * (+(d.unit||1))]);
+    var a2=+d.tiers.affiche.achat, v2=+d.tiers.affiche.vente, u2=+(d.unit||1), md=+d.mid;
+    if (!(a2>0) || !(v2>a2) || (v2/a2)>1.5) continue;      /* ligne incohérente → exclue */
+    if (!(md>0) || md<a2*0.8 || md>v2*1.2) md=(a2+v2)/2;   /* mid aberrant → milieu affiche */
+    m.fx[code]={mid:md, u:u2, a:a2, v:v2};
+    m.all.push([code, md*u2]);
   }
   m.all.sort(function(a,b){ return a[0]<b[0]?-1:1; });
   /* OR/ARGENT : règle de Fafa — prix du GRAMME live (série filtrée) × 1000.
@@ -509,6 +521,8 @@ function saveCache(){ try{ localStorage.setItem('hx_v4', JSON.stringify(model));
 function loadCache(){
   try{ var s=localStorage.getItem('hx_v4'); if(!s) return false;
     var m=JSON.parse(s); if(!m||!m.all||!m.all.length) return false;
+    var e2=m.fx&&m.fx.EUR;                                /* cache empoisonné → rejeté */
+    if(!e2||!(e2.a>0.5&&e2.a<1.5&&e2.v>0.5&&e2.v<1.5)) return false;
     if(!(m.xau>50000 && m.xau<500000)) m.xau=SNAP.xau;   /* purge tick aberrant mémorisé */
     if(!(m.xag>300 && m.xag<20000)) m.xag=SNAP.xag;
     m.live=false; model=m; renderBoard(); return true; }catch(e){ return false; }
