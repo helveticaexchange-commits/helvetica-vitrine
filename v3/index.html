@@ -236,6 +236,20 @@ body.gpon .frame,body.gpon .corn{opacity:0;transition:opacity 1s ease}
 #gwi-path{fill:none;stroke:#ffd76a;stroke-width:6;stroke-linecap:round;
   filter:drop-shadow(0 0 14px rgba(255,205,90,.45))}
 .gwi-lab{position:absolute;font-size:30px;color:#8a6b3a;font-family:Georgia,serif;letter-spacing:.08em}
+/* ── v3.7 : LA MÉMOIRE D'OR — 7 jours d'or en barres discrètes (données réelles) ── */
+#gw7{position:absolute;right:4px;top:-64px;display:flex;align-items:flex-end;height:56px}
+#gw7 i{display:block;width:13px;margin-left:6px;border-radius:2px 2px 0 0;
+  background:linear-gradient(180deg,#9a7a42,#5d4623)}
+#gw7 i.today{background:linear-gradient(180deg,#fff0c0,#ffd76a);box-shadow:0 0 12px rgba(255,215,106,.55)}
+#gw7 b{font-size:21px;color:#8a6b3a;font-family:Georgia,serif;letter-spacing:.14em;
+  margin-right:12px;font-weight:400;align-self:center}
+/* ── v3.7 : LE SCEAU VIVANT — la date et le fixing du jour frappés sous la pièce ── */
+#stamp-fix{position:absolute;left:0;right:0;bottom:330px;font-size:42px;letter-spacing:.24em;
+  color:#c9963e;font-family:Georgia,serif;opacity:0}
+#sc-stamp.on #stamp-fix{animation:poincon 1.2s steps(2,end) .9s forwards}
+/* ── v3.7 : LE POULS — le point du pied de page bat à chaque mise à jour des taux ── */
+@keyframes beatx{0%{transform:scale(1)}30%{transform:scale(1.9);box-shadow:0 0 34px #ffd76a}100%{transform:scale(1)}}
+.dot.beatx{animation:beatx .9s ease}
 #gwi-cap{margin-top:10px;font-size:35px;letter-spacing:.2em;color:#c9963e;font-family:Georgia,serif}
 #gwi-cap b{font-weight:600;color:#7de87f;text-shadow:0 0 16px rgba(110,230,110,.5)}
 #gwi-cap b.dn{color:#ff6357;text-shadow:0 0 16px rgba(255,90,70,.5)}
@@ -347,6 +361,7 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
         <div class="ac"><b id="gag-kg">1'721</b><span>CHF/kg</span></div>
       </div>
       <div id="gwi">
+        <div id="gw7"></div>
         <svg viewBox="0 0 1560 230" preserveAspectRatio="none">
           <path id="gwi-path"/>
           <circle id="gwi-tip" r="10" fill="#fff0c0" opacity="0"/>
@@ -418,6 +433,7 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
   <section id="sc-stamp">
     <div class="stf"></div>
     <div class="ray"></div>
+    <div id="stamp-fix"></div>
     <div id="stamp-cap">HELVETICA EXCHANGE · GENÈVE</div>
     <svg id="stamp-svg" viewBox="0 0 900 900">
       <circle cx="450" cy="450" r="420" fill="none" stroke="#ffd76a" stroke-width="7"/>
@@ -784,6 +800,14 @@ function renderBoard(){
     if(!isNaN(t)) document.getElementById('maj').textContent =
       ('0'+t.getHours()).slice(-2)+':'+('0'+t.getMinutes()).slice(-2);
   }catch(e){}
+  /* v3.7 : le sceau vivant (date + fixing frappés au poinçon) + le pouls (le point bat) */
+  try{
+    var sf=document.getElementById('stamp-fix');
+    if(sf && model.xau){ var nD=new Date();
+      sf.textContent=('0'+nD.getDate()).slice(-2)+'.'+('0'+(nD.getMonth()+1)).slice(-2)+' · OR '+f2(model.xau/1000)+' CHF/g'; }
+    var dt=document.querySelector('.dot');
+    if(dt){ dt.classList.remove('beatx'); void dt.offsetWidth; dt.classList.add('beatx'); }
+  }catch(e){}
   renderTicker();
 }
 
@@ -1038,7 +1062,7 @@ function show(name){
   cur=name; if(SC[cur]) SC[cur].classList.add('on');
   document.body.className = FULLB[name] ? 'gpon' : (name==='gold' ? 'goldon' : '');
   if(name==='rates') setTimeout(spinAll, 350);   /* v3 : les chiffres roulent puis s'arretent */
-  if(name==='gold') setTimeout(drawWire, 500);   /* v3.2 : le fil d'or se trace dans la page or fin */
+  if(name==='gold'){ setTimeout(drawWire, 500); renderWeek(); }  /* v3.2/3.7 : fil d'or + mémoire d'or */
 }
 function playMedia(m){
   var fr=document.getElementById('mframe'); fr.innerHTML='';
@@ -1106,6 +1130,30 @@ function loadIntraday(){
   }).catch(function(){});
 }
 loadIntraday(); setInterval(loadIntraday, 600000);
+/* ═ v3.7 : LA MÉMOIRE D'OR — 6 clôtures du soir (données Daric réelles) + aujourd'hui en direct ═ */
+var gw7Data=[];
+function loadWeek(){
+  fetch(CLOUD+'/rest/v1/metal_daily_snapshots?metal=eq.or&currency=eq.CHF&slot=eq.evening&order=snapshot_date.desc&limit=6&select=snapshot_date,avg_price_per_g',
+    {headers:{apikey:CKEY, Authorization:'Bearer '+CKEY}})
+  .then(function(r){return r.json();})
+  .then(function(rows){ if(rows && rows.length){ gw7Data = rows.reverse(); renderWeek(); } })
+  .catch(function(){});
+}
+function renderWeek(){
+  var host=document.getElementById('gw7'); if(!host || !gw7Data.length) return;
+  var live = (model && model.xau) ? model.xau/1000 : null;
+  var vals = gw7Data.map(function(r){ return +r.avg_price_per_g; });
+  if(live) vals.push(live);
+  var mn=Math.min.apply(null,vals), mx=Math.max.apply(null,vals);
+  if(mx-mn < 0.3){ var c=(mx+mn)/2; mn=c-0.15; mx=c+0.15; }
+  var h='' ,i;
+  for(i=0;i<vals.length;i++){
+    var hh = 16 + Math.round(40*(vals[i]-mn)/(mx-mn));
+    h += '<i style="height:'+hh+'px"'+(i===vals.length-1?' class="today"':'')+'></i>';
+  }
+  host.innerHTML = h;   /* les 7 barres parlent d'elles-mêmes (la dernière = aujourd'hui, en or vif) */
+}
+loadWeek(); setInterval(loadWeek, 3600000);
 function drawWire(){
   if(gwPts.length<2) return;
   var W=1560,H=230,P=38, i, mn=1e12, mx=-1e12, t0=gwPts[0][0], t1=gwPts[gwPts.length-1][0];
