@@ -393,7 +393,7 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
     <div class="fsub">
       <span>LUN–VEN 8H30–18H30 · SAM 9H–17H</span>
       <span class="dot"></span>
-      <span>TAUX EN DIRECT · LIVE RATES · <span id="maj">15:38</span> · <span class="vsv">▲▼ vs veille</span></span>
+      <span>TAUX EN DIRECT · LIVE RATES · <span id="maj">15:38</span> · <span class="vsv">▲▼ vs hier 19h</span></span>
     </div>
   </footer>
 
@@ -581,18 +581,34 @@ function loadRefs(){
   if (mid > new Date()) mid.setDate(mid.getDate()-1);
   var iso = mid.toISOString();
   var H2 = {apikey:CKEY, Authorization:'Bearer '+CKEY};
-  fetch(CLOUD+'/rest/v1/fx_rates?quote=eq.CHF&base=in.(EUR,USD,GBP,JPY,CAD)&ts=lt.'+iso+'&order=ts.desc&limit=80&select=base,rate',
-    {headers:H2}).then(function(r){return r.json();}).then(function(rows){
-      /* canari : MÉDIANE des derniers points par devise — la base contient parfois des
-         taux aberrants (ex. EUR à 7.85) qui rendraient les flèches folles. */
-      var i,b,acc={};
-      for(i=0;i<rows.length;i++){ b=rows[i].base; (acc[b]=acc[b]||[]).push(+rows[i].rate); }
-      for(b in acc){
-        var v=acc[b].sort(function(x,y){return x-y;});
-        REFS[b]=v[Math.floor(v.length/2)];
-      }
-      renderBoard();
-    }).catch(function(){});
+  /* DEVISES : référence = L'AFFICHAGE D'HIER À LA FERMETURE, 18h–19h (verdict Fafa 21.08 —
+     « regarde notre affichage hier jusqu'à 19 h et compare avec l'affichage actuel »).
+     MÉDIANE par devise sur la fenêtre (canari anti-taux-aberrants, ex. EUR à 7.85).
+     Si un jour est vide (week-end, trou), on recule d'un jour, jusqu'à 4. */
+  var FXK = ['EUR','USD','GBP','JPY','CAD'];
+  for (var fi=0; fi<FXK.length; fi++) delete REFS[FXK[fi]];
+  var fxApply = function(rows){
+    var i,b,acc={};
+    for(i=0;i<rows.length;i++){ b=rows[i].base; (acc[b]=acc[b]||[]).push(+rows[i].rate); }
+    for(b in acc){
+      if(REFS[b]!==undefined) continue;
+      var v=acc[b].sort(function(x,y){return x-y;});
+      REFS[b]=v[Math.floor(v.length/2)];
+    }
+    renderBoard();
+    var n=0; for(i=0;i<FXK.length;i++) if(REFS[FXK[i]]!==undefined) n++;
+    return n;
+  };
+  (function tryDay(n){
+    if(n>4) return;
+    var d0=new Date(); d0.setDate(d0.getDate()-n);
+    var a=new Date(d0); a.setHours(18,0,0,0);
+    var b=new Date(d0); b.setHours(19,0,0,0);
+    fetch(CLOUD+'/rest/v1/fx_rates?quote=eq.CHF&base=in.(EUR,USD,GBP,JPY,CAD)&ts=gte.'+a.toISOString()+'&ts=lte.'+b.toISOString()+'&order=ts.desc&limit=160&select=base,rate',
+      {headers:H2}).then(function(r){return r.json();}).then(function(rows){
+        if(fxApply(rows||[]) < 5) tryDay(n+1);
+      }).catch(function(){ tryDay(n+1); });
+  })(1);
   /* clôture = MÉDIANE des 7 derniers points avant 23h : robuste aux points aberrants
      (unité once/kilo glissée dans la colonne au gramme) sans toucher à la base. */
   var medianRef = function(j){
