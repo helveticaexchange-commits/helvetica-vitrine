@@ -240,6 +240,8 @@ body.gpon .frame,body.gpon .corn{opacity:0;transition:opacity 1s ease}
 #gwi-cap b.dn{color:#ff6357;text-shadow:0 0 16px rgba(255,90,70,.5)}
 #gwi-cap .gwv{font-variant:small-caps;letter-spacing:.08em;display:none}
 #gwi-abs{color:#e8c078}
+#gwi-abs.up{color:#7de87f;text-shadow:0 0 16px rgba(110,230,110,.5)}
+#gwi-abs.dn{color:#ff6357;text-shadow:0 0 16px rgba(255,90,70,.5)}
 /* ── v3 : LE POINÇON — estampe du monogramme en clôture de boucle ── */
 #sc-stamp{position:absolute;left:0;top:0;width:2100px;height:2100px;z-index:8;opacity:0;
   pointer-events:none;display:none;text-align:center;background-color:#0d0702;
@@ -704,7 +706,8 @@ function renderBoard(){
       ngd.textContent = dAu.a+' '+dAu.p; ngd.className = dAu.c==='dn' ? 'dn' : '';
       /* verdict Fafa : l'écart en francs AU KILO + la valeur de référence d'hier, pas que le % */
       var absK = (og - REFS.XAU)*1000;
-      if(nga) nga.textContent = ' · '+(absK>=0?'+':'−')+swiss(Math.abs(absK))+' CHF/kg';
+      if(nga){ nga.textContent = ' · '+(absK>=0?'+':'−')+swiss(Math.abs(absK))+' CHF/kg';
+        nga.className = dAu.c; }  /* verdict Fafa : le montant porte la même couleur que le % */
       if(ngr){ ngr.textContent = ' · hier '+swiss(REFS.XAU*1000); ngr.style.display='inline'; }
     } else {
       if(nga) nga.textContent=''; if(ngr) ngr.style.display='none';
