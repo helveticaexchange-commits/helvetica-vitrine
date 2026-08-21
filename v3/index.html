@@ -110,27 +110,28 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
 @keyframes pulse{0%{filter:brightness(1)}25%{filter:brightness(1.75)}100%{filter:brightness(1)}}
 /* ── scène OR & ARGENT ── */
 #sc-gold{align-items:center;justify-content:center;text-align:center}
-.gttl{font-size:116px;letter-spacing:.14em;color:#fff0c0;text-shadow:0 0 50px rgba(255,200,80,.8)}
-.gsub{font-size:42px;letter-spacing:.48em;color:#ffd76a;margin:24px 0 8px;font-family:Georgia,serif;text-transform:uppercase}
-.gbig{font-size:218px;line-height:1.02;font-weight:600;font-variant-numeric:tabular-nums;
+.gttl{font-size:96px;letter-spacing:.14em;color:#fff0c0;text-shadow:0 0 50px rgba(255,200,80,.8)}
+.gsub{font-size:38px;letter-spacing:.48em;color:#ffd76a;margin:14px 0 4px;font-family:Georgia,serif;text-transform:uppercase}
+.gbig{font-size:190px;line-height:1.02;font-weight:600;font-variant-numeric:tabular-nums;
   background:linear-gradient(180deg,#fff6d8 8%,#ffd76a 45%,#d99b32 70%,#ffe9a8 95%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 6px 40px rgba(255,195,70,.55))}
-.gunit{font-size:50px;color:#e8c078;letter-spacing:.3em;margin-top:8px;font-family:Georgia,serif}
-.gline{display:flex;justify-content:center;margin-top:50px}
-.gline>div{margin:0 62px}
-.gline>div{margin:0 60px}
-.gline b{display:block;font-size:84px;color:#ffe9a8;font-weight:600;font-variant-numeric:tabular-nums;
+.gunit{font-size:46px;color:#e8c078;letter-spacing:.3em;margin-top:4px;font-family:Georgia,serif}
+.gline{display:grid;grid-template-columns:430px 470px 470px;justify-content:center;margin-top:30px}
+.gline>div{margin:0}
+.gline>div:first-child{grid-column:2}
+.gline b{display:block;font-size:78px;color:#ffe9a8;font-weight:600;font-variant-numeric:tabular-nums;
   text-shadow:0 0 30px rgba(255,205,90,.6)}
-.gline span{display:block;font-size:36px;color:#dfae62;letter-spacing:.28em;margin-top:12px;font-family:Georgia,serif}
-.gsep{width:760px;height:2.5px;margin:54px auto 0;
+.gline span{display:block;font-size:33px;color:#dfae62;letter-spacing:.28em;margin-top:8px;font-family:Georgia,serif}
+.gsep{width:760px;height:2.5px;margin:32px auto 0;
   background:linear-gradient(90deg,transparent,#ffd76a,transparent);box-shadow:0 0 20px rgba(255,200,80,.6)}
-.arg{display:flex;align-items:baseline;justify-content:center;margin-top:40px}
-.arg>*{margin:0 20px}
-.arg .t{margin-right:36px}
-.arg>*{margin:0 18px}
-.arg .t{font-size:62px;color:#f2f2f0;letter-spacing:.18em;text-shadow:0 0 26px rgba(240,240,240,.4)}
-.arg b{font-size:92px;color:#f5f0e2;font-weight:600;font-variant-numeric:tabular-nums;
+.arg{display:grid;grid-template-columns:430px 470px 470px;justify-content:center;
+  align-items:baseline;margin-top:26px}
+.arg .t{text-align:right;padding-right:34px;white-space:nowrap}
+.arg .ac{text-align:center;white-space:nowrap}
+.arg .ac b{margin-right:16px}
+.arg .t{font-size:54px;color:#f2f2f0;letter-spacing:.16em;text-shadow:0 0 26px rgba(240,240,240,.4)}
+.arg b{font-size:86px;color:#f5f0e2;font-weight:600;font-variant-numeric:tabular-nums;
   text-shadow:0 0 34px rgba(240,230,200,.5)}
 .arg span{font-size:37px;color:#cfc4ac;letter-spacing:.14em}
 /* ── scène MÉDIA ── */
@@ -230,12 +231,12 @@ body.gpon .frame,body.gpon .corn{opacity:0;transition:opacity 1s ease}
   animation:rayswp 21s linear infinite}
 @keyframes rayswp{0%{background-position:220% 0}12%{background-position:-120% 0}100%{background-position:-120% 0}}
 /* ── v3.2 : LE FIL D'OR intégré à la page OR FIN — médaillon intraday (verdict Fafa) ── */
-#gwi{margin-top:44px;position:relative;width:1560px}
-#gwi svg{display:block;width:1560px;height:300px;overflow:visible}
+#gwi{margin-top:26px;position:relative;width:1560px}
+#gwi svg{display:block;width:1560px;height:230px;overflow:visible}
 #gwi-path{fill:none;stroke:#ffd76a;stroke-width:6;stroke-linecap:round;
   filter:drop-shadow(0 0 14px rgba(255,205,90,.45))}
 .gwi-lab{position:absolute;font-size:30px;color:#8a6b3a;font-family:Georgia,serif;letter-spacing:.08em}
-#gwi-cap{margin-top:16px;font-size:37px;letter-spacing:.2em;color:#c9963e;font-family:Georgia,serif}
+#gwi-cap{margin-top:10px;font-size:35px;letter-spacing:.2em;color:#c9963e;font-family:Georgia,serif}
 #gwi-cap b{font-weight:600;color:#7de87f;text-shadow:0 0 16px rgba(110,230,110,.5)}
 #gwi-cap b.dn{color:#ff6357;text-shadow:0 0 16px rgba(255,90,70,.5)}
 #gwi-cap .gwv{font-variant:small-caps;letter-spacing:.08em;display:none}
@@ -342,11 +343,11 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
       <div class="gsep"></div>
       <div class="arg">
         <span class="t">ARGENT 999</span>
-        <b id="gag-g">1.72</b><span>CHF/g</span>
-        <b id="gag-kg">1'721</b><span>CHF/kg</span>
+        <div class="ac"><b id="gag-g">1.72</b><span>CHF/g</span></div>
+        <div class="ac"><b id="gag-kg">1'721</b><span>CHF/kg</span></div>
       </div>
       <div id="gwi">
-        <svg viewBox="0 0 1560 300" preserveAspectRatio="none">
+        <svg viewBox="0 0 1560 230" preserveAspectRatio="none">
           <path id="gwi-path"/>
           <circle id="gwi-tip" r="10" fill="#fff0c0" opacity="0"/>
         </svg>
@@ -582,8 +583,14 @@ function loadRefs(){
   var H2 = {apikey:CKEY, Authorization:'Bearer '+CKEY};
   fetch(CLOUD+'/rest/v1/fx_rates?quote=eq.CHF&base=in.(EUR,USD,GBP,JPY,CAD)&ts=lt.'+iso+'&order=ts.desc&limit=80&select=base,rate',
     {headers:H2}).then(function(r){return r.json();}).then(function(rows){
-      var i,b;
-      for(i=0;i<rows.length;i++){ b=rows[i].base; if(REFS[b]===undefined) REFS[b]=+rows[i].rate; }
+      /* canari : MÉDIANE des derniers points par devise — la base contient parfois des
+         taux aberrants (ex. EUR à 7.85) qui rendraient les flèches folles. */
+      var i,b,acc={};
+      for(i=0;i<rows.length;i++){ b=rows[i].base; (acc[b]=acc[b]||[]).push(+rows[i].rate); }
+      for(b in acc){
+        var v=acc[b].sort(function(x,y){return x-y;});
+        REFS[b]=v[Math.floor(v.length/2)];
+      }
       renderBoard();
     }).catch(function(){});
   /* clôture = MÉDIANE des 7 derniers points avant 23h : robuste aux points aberrants
@@ -1051,7 +1058,7 @@ function loadIntraday(){
 loadIntraday(); setInterval(loadIntraday, 600000);
 function drawWire(){
   if(gwPts.length<2) return;
-  var W=1560,H=300,P=44, i, mn=1e12, mx=-1e12, t0=gwPts[0][0], t1=gwPts[gwPts.length-1][0];
+  var W=1560,H=230,P=38, i, mn=1e12, mx=-1e12, t0=gwPts[0][0], t1=gwPts[gwPts.length-1][0];
   for(i=0;i<gwPts.length;i++){ if(gwPts[i][1]<mn)mn=gwPts[i][1]; if(gwPts[i][1]>mx)mx=gwPts[i][1]; }
   if(mx-mn < 0.2){ var c=(mx+mn)/2; mn=c-0.1; mx=c+0.1; }
   var d='';
