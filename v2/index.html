@@ -168,12 +168,19 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
 #gp-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .gp-cell{position:absolute;width:39.8%;height:7.8%;display:flex;align-items:center;justify-content:center;
   font-variant-numeric:tabular-nums;font-family:'Helvetica Neue',Arial,sans-serif}
-.gp-cell b{font-size:138px;font-weight:600;color:#fff3dd;
-  text-shadow:0 0 36px rgba(255,236,190,.7),0 0 9px rgba(255,246,220,.9)}
-.gp-cell .u{font-size:52px;color:#ffd76a;margin-left:30px;letter-spacing:.08em;
+.gp-cell b{font-size:132px;font-weight:600;color:#fff3dd;
+  text-shadow:0 0 34px rgba(255,236,190,.7),0 0 9px rgba(255,246,220,.9)}
+.gp-cell .u{font-size:50px;color:#ffd76a;margin-left:28px;letter-spacing:.08em;
   text-shadow:0 0 16px rgba(255,190,80,.55)}
 body.gpon header,body.gpon .hrule,body.gpon #tickw,body.gpon footer,
 body.gpon .frame,body.gpon .corn{opacity:0;transition:opacity 1s ease}
+/* ── PAGE BILLETS : écrin généré + VRAIS billets composés par la page ── */
+#sc-billets{position:absolute;inset:0;z-index:8;opacity:0;transition:opacity 1.1s ease;
+  pointer-events:none;background:#241505}
+#sc-billets.on{opacity:1}
+#bl-decor{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#bl-fan{position:absolute;left:12%;top:29.5%;width:76%;
+  filter:drop-shadow(0 34px 60px rgba(0,0,0,.6))}
 /* ── MODE NUIT 22h–6h « L'or ne dort jamais » ── */
 #sc-night{position:absolute;inset:0;z-index:9;background:#060402;opacity:0;transition:opacity 2.2s ease;
   pointer-events:none;text-align:center}
@@ -309,6 +316,11 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
     <img id="gp-img" alt="">
     <div class="gp-cell" style="left:42.7%;top:29.2%"><b id="gpc-au-g">117.40</b><span class="u">CHF/g</span></div>
     <div class="gp-cell" style="left:42.7%;top:40.1%"><b id="gpc-ag-g">1.78</b><span class="u">CHF/g</span></div>
+  </section>
+
+  <!-- PAGE BILLETS : panneau complet généré (éventail superréaliste, textes fondus) -->
+  <section id="sc-billets">
+    <img id="bl-decor" alt="">
   </section>
 
   <!-- MODE NUIT 22h–6h « L'or ne dort jamais » -->
@@ -723,16 +735,25 @@ var PANEL='assets/gold-panel.jpg', panelOk=false;
   gp.onerror=function(){ panelOk=false; };
   gp.src=PANEL;
 })();
+/* panneau billets complet — la scène n'entre dans la boucle que s'il charge */
+var DECOR='assets/currency-panel.jpg', decorOk=false;
+(function(){
+  var d=new Image();
+  d.onload=function(){ decorOk=true; document.getElementById('bl-decor').src=DECOR; };
+  d.onerror=function(){ decorOk=false; };
+  d.src=DECOR;
+})();
 
 /* ── moteur de scènes ── */
 var SC={rates:document.getElementById('sc-rates'), gold:document.getElementById('sc-gold'),
         media:document.getElementById('sc-media'), msg:document.getElementById('sc-msg'),
-        goldpanel:document.getElementById('sc-goldpanel')};
+        goldpanel:document.getElementById('sc-goldpanel'),
+        billets:document.getElementById('sc-billets')};
 var cur='rates';
 function show(name){
   if(SC[cur]) SC[cur].classList.remove('on');
   cur=name; SC[cur].classList.add('on');
-  document.body.className = (name==='goldpanel') ? 'gpon' : '';
+  document.body.className = (name==='goldpanel'||name==='billets') ? 'gpon' : '';
 }
 function playMedia(m){
   var fr=document.getElementById('mframe'); fr.innerHTML='';
@@ -751,13 +772,16 @@ function cycle(){
   /* ordre AURÈLE (accroche → preuve → offre → accueil), tour = 60 s pile :
      média 8 + taux 24 + or 18 + bienvenue 10 · sans média : 28+20+12 = 60 */
   var m=MEDIA.length? MEDIA[mIdx%MEDIA.length] : null;
-  var useMedia = m && mediaOk[m.url]===true;
+  var useBillets = (decorOk===true);
+  var useMedia = !useBillets && m && mediaOk[m.url]===true;
   var goldScene = panelOk ? 'goldpanel' : 'gold';
   var seq=[];
-  if(useMedia) seq.push(['media',8000]);
-  seq.push(['rates', useMedia?24000:28000]);
-  seq.push([goldScene, useMedia?18000:20000]);
-  seq.push(['msg', useMedia?10000:12000]);
+  if(useBillets) seq.push(['billets',8000]);
+  else if(useMedia) seq.push(['media',8000]);
+  var hasHook = useBillets||useMedia;
+  seq.push(['rates', hasHook?24000:28000]);
+  seq.push([goldScene, hasHook?18000:20000]);
+  seq.push(['msg', hasHook?10000:12000]);
   var i=0;
   (function nx(){
     var s=seq[i%seq.length];
