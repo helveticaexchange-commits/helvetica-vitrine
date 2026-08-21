@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=576,initial-scale=1,user-scalable=no">
 <meta name="robots" content="noindex">
-<title>HELVETICA EXCHANGE · Vitrine LED v2 Panneau</title>
+<title>HELVETICA EXCHANGE · Vitrine LED v3 Laboratoire</title>
 <style>
 /* ═══════════════════════════════════════════════════════════════
    HELVETICA EXCHANGE · VITRINE v2 « PANNEAU » · 20.08.2026
@@ -42,7 +42,7 @@ body{font-family:'Didot','Playfair Display','Cormorant Garamond',Georgia,'Times 
 #beamB{left:-400px;width:260px;opacity:.3;animation:sweep 34s linear infinite 9s}
 @keyframes sweep{0%{transform:translateX(-200px) rotate(8deg)}100%{transform:translateX(2900px) rotate(8deg)}}
 canvas#fxc{position:absolute;left:0;top:0;width:2100px;height:2100px;pointer-events:none}
-svg#curve{position:absolute;left:0;right:0;top:990px;width:2100px;height:760px;pointer-events:none;opacity:.22}
+svg#curve{position:absolute;left:0;right:0;top:990px;width:2100px;height:760px;pointer-events:none;opacity:.4}
 /* ── cadre or ── */
 .frame{position:absolute;left:34px;top:34px;right:34px;bottom:34px;border:3px solid rgba(255,214,106,.55);pointer-events:none;
   box-shadow:0 0 60px rgba(255,190,80,.28) inset, 0 0 40px rgba(255,190,80,.22)}
@@ -88,12 +88,12 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
 #rows{flex:1;display:flex;flex-direction:column;justify-content:space-evenly}
 .row{display:grid;grid-template-columns:660px 1fr 1fr;align-items:center;gap:0 40px;
   padding:12px 26px;position:relative}
-.row:not(:last-child):after{content:'';position:absolute;left:20px;right:20px;bottom:-2px;height:2px;
-  background:linear-gradient(90deg,transparent,rgba(255,214,106,.42),transparent)}
+.row:not(:last-child):after{content:'';position:absolute;left:20px;right:20px;bottom:-2px;height:2.5px;
+  background:linear-gradient(90deg,rgba(255,214,106,0),rgba(255,214,106,.62) 12%,rgba(255,214,106,.62) 88%,rgba(255,214,106,0))}
 .dev{display:flex;align-items:center}
-.dev .flag{margin-right:38px}
-.flag{width:132px;height:96px;border-radius:10px;overflow:hidden;flex:none;position:relative;
-  box-shadow:0 3px 16px rgba(0,0,0,.5), 0 0 0 2px rgba(255,214,106,.4)}
+.dev .flag{margin-right:44px}
+.flag{width:225px;height:150px;border-radius:8px;overflow:hidden;flex:none;position:relative;
+  box-shadow:0 5px 20px rgba(0,0,0,.5), 0 0 0 2px rgba(255,214,106,.5)}
 .flag svg{display:block;width:100%;height:100%}
 .flag i{position:absolute;left:0;top:0;width:100%;height:100%;display:block;
   background:linear-gradient(115deg,transparent 32%,rgba(255,255,255,.42) 50%,transparent 68%) no-repeat;
@@ -200,6 +200,51 @@ body.gpon .frame,body.gpon .corn{opacity:0;transition:opacity 1s ease}
 #nt-ar{font-size:110px;vertical-align:middle;margin-left:36px}
 .nt-s{position:absolute;left:0;right:0;bottom:225px;font-size:56px;letter-spacing:.14em;color:#ffe2a0}
 .nt-ad{position:absolute;left:0;right:0;bottom:135px;font-size:33px;letter-spacing:.3em;color:#8a6b3a;font-family:Georgia,serif}
+/* ── v3 : flèches boursières vs veille ── */
+.dta{display:inline-block;font-size:52px;margin-left:26px;vertical-align:middle;line-height:1}
+.dta.up{color:#7de87f;text-shadow:0 0 18px rgba(110,230,110,.6)}
+.dta.dn{color:#ff6357;text-shadow:0 0 18px rgba(255,90,70,.6)}
+.gp-delta{position:absolute;width:8%;text-align:center;font-family:'Helvetica Neue',Arial,sans-serif}
+.gp-delta b{display:block;font-size:66px;line-height:1}
+.gp-delta span{display:block;font-size:26px;color:#dfae62;letter-spacing:.06em;margin-top:6px}
+.gp-delta.up b{color:#7de87f;text-shadow:0 0 20px rgba(110,230,110,.6)}
+.gp-delta.dn b{color:#ff6357;text-shadow:0 0 20px rgba(255,90,70,.6)}
+/* ── v3 : rayon d'horloger (lame de lumière toutes les ~20 s) ── */
+.ray{position:absolute;left:0;top:0;width:2100px;height:2100px;pointer-events:none;z-index:3;
+  background:linear-gradient(115deg, rgba(255,246,220,0) 42%, rgba(255,246,220,.15) 50%, rgba(255,246,220,0) 58%);
+  background-size:300% 100%;background-repeat:no-repeat;
+  animation:rayswp 21s linear infinite}
+@keyframes rayswp{0%{background-position:220% 0}12%{background-position:-120% 0}100%{background-position:-120% 0}}
+/* ── v3 : LE FIL D'OR — courbe intraday réelle tracée à l'heure pile ── */
+#sc-goldwire{position:absolute;left:0;top:0;width:2100px;height:2100px;z-index:8;opacity:0;
+  transition:opacity 1.4s ease;pointer-events:none;background:#0a0703;text-align:center}
+#sc-goldwire.on{opacity:1}
+.gw-t{padding-top:210px;font-size:64px;letter-spacing:.42em;color:#c9963e;font-family:Georgia,serif}
+.gw-v{margin-top:36px;font-size:150px;font-weight:600;font-variant-numeric:tabular-nums;color:#fff0c0;
+  text-shadow:0 0 50px rgba(255,200,80,.55)}
+.gw-v small{font-size:52px;color:#dfae62;margin-left:22px}
+#gw-svg{position:absolute;left:150px;top:640px;width:1800px;height:900px}
+.gw-lab{position:absolute;font-size:34px;color:#8a6b3a;font-family:Georgia,serif;letter-spacing:.1em}
+.gw-s{position:absolute;left:0;right:0;bottom:230px;font-size:50px;letter-spacing:.16em;color:#ffe2a0}
+/* ── v3 : LE POINÇON — estampe du monogramme en clôture de boucle ── */
+#sc-stamp{position:absolute;left:0;top:0;width:2100px;height:2100px;z-index:8;opacity:0;
+  pointer-events:none;background:#160d04;display:none;text-align:center}
+#sc-stamp.on{display:block;animation:stampin 2.2s steps(1) forwards}
+@keyframes stampin{0%{opacity:0}10%{opacity:1}100%{opacity:1}}
+#stamp-svg{margin-top:560px;width:900px;height:900px;opacity:0}
+#sc-stamp.on #stamp-svg{animation:poincon 1.5s steps(3,end) .2s forwards}
+@keyframes poincon{0%{opacity:0}100%{opacity:1}}
+#stamp-flash{position:absolute;left:0;top:0;width:2100px;height:2100px;background:rgba(255,226,160,0);pointer-events:none}
+#sc-stamp.on #stamp-flash{animation:sflash 2.2s ease .9s}
+@keyframes sflash{0%,100%{background:rgba(255,226,160,0)}12%{background:rgba(255,226,160,.28)}}
+/* ── v3 : aube + QR ── */
+#nt-open{display:none;margin-top:46px;font-size:66px;letter-spacing:.3em;color:#ffe2a0;font-family:Georgia,serif}
+#nt-qr{position:absolute;right:150px;bottom:150px;width:240px;height:240px;padding:22px;background:#fff8ea;
+  border-radius:14px;box-shadow:0 0 40px rgba(255,200,80,.35);display:none}
+#nt-qr svg{display:block;width:100%;height:100%}
+#sc-night.on #nt-qr{display:block}
+.qr-cap{position:absolute;right:150px;bottom:100px;width:284px;text-align:center;font-size:26px;
+  color:#8a6b3a;letter-spacing:.08em;font-family:Georgia,serif}
 /* ── pied ── */
 footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-align:center}
 .faddr{font-size:46px;letter-spacing:.28em;color:#ffe2a0;font-family:Georgia,serif;text-shadow:0 0 22px rgba(255,190,80,.5)}
@@ -223,8 +268,9 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
       </linearGradient>
       <filter id="gl"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
     </defs>
-    <path id="cpath" fill="none" stroke="url(#gg)" stroke-width="6" filter="url(#gl)" stroke-linecap="round"/>
+    <path id="cpath" fill="none" stroke="url(#gg)" stroke-width="8" filter="url(#gl)" stroke-linecap="round"/>
     <circle id="ctip" r="13" fill="#fff0c0" opacity="0"/>
+    <polygon id="carr" fill="#fff0c0" opacity="0"/>
   </svg>
   <div class="beam" id="beamA"></div>
   <div class="beam" id="beamB"></div>
@@ -319,13 +365,43 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
   <!-- PAGE OR « PANNEAU RÉEL » — image validée plein écran + cours live dans les cellules -->
   <section id="sc-goldpanel">
     <img id="gp-img" alt="">
+    <div class="ray"></div>
     <div class="gp-cell" style="left:42.7%;top:29.2%"><b id="gpc-au-g">117.40</b><span class="u">CHF/g</span></div>
     <div class="gp-cell" style="left:42.7%;top:40.1%"><b id="gpc-ag-g">1.78</b><span class="u">CHF/g</span></div>
+    <div class="gp-delta" id="gpd-au" style="left:83.2%;top:30.4%"><b>▲</b><span>vs hier</span></div>
+    <div class="gp-delta" id="gpd-ag" style="left:83.2%;top:41.3%"><b>▲</b><span>vs hier</span></div>
   </section>
 
   <!-- PAGE BILLETS : panneau complet généré (éventail superréaliste, textes fondus) -->
   <section id="sc-billets">
     <img id="bl-decor" alt="">
+    <div class="ray"></div>
+  </section>
+
+  <!-- LE FIL D'OR : courbe intraday reelle, tracee a l'heure pile -->
+  <section id="sc-goldwire">
+    <div class="gw-t">OR · AUJOURD'HUI · CHF LE GRAMME</div>
+    <div class="gw-v"><span id="gw-val">—</span><small id="gw-dta"></small></div>
+    <svg id="gw-svg" viewBox="0 0 1800 900" preserveAspectRatio="none">
+      <path id="gw-path" fill="none" stroke="#ffd76a" stroke-width="5" stroke-linecap="round"/>
+      <circle id="gw-tip" r="11" fill="#fff0c0" opacity="0"/>
+    </svg>
+    <div class="gw-lab" id="gw-min" style="left:160px;bottom:520px">—</div>
+    <div class="gw-lab" id="gw-max" style="left:160px;top:600px">—</div>
+    <div class="gw-s">Le fil d'or du jour · Today's gold thread</div>
+  </section>
+
+  <!-- LE POINCON : estampe du monogramme en cloture de boucle -->
+  <section id="sc-stamp">
+    <svg id="stamp-svg" viewBox="0 0 900 900">
+      <circle cx="450" cy="450" r="420" fill="none" stroke="#ffd76a" stroke-width="7"/>
+      <circle cx="450" cy="450" r="392" fill="none" stroke="#c9963e" stroke-width="2.5"/>
+      <text x="450" y="520" text-anchor="middle" font-family="Didot,Georgia,serif" font-size="330"
+        fill="#ffe9a8" letter-spacing="18">HE</text>
+      <text x="450" y="660" text-anchor="middle" font-family="Georgia,serif" font-size="44"
+        fill="#c9963e" letter-spacing="14">GENÈVE · MMXXVI</text>
+    </svg>
+    <div id="stamp-flash"></div>
   </section>
 
   <!-- MODE NUIT 22h–6h « L'or ne dort jamais » -->
@@ -334,7 +410,10 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
     <div class="nt-v"><span id="nt-val">3'652</span><span id="nt-ar" style="color:#8ef08a">▲</span></div>
     <div class="nt-u">COURS EN DIRECT · LIVE</div>
     <div class="nt-s">L'or ne dort jamais · Gold never sleeps</div>
+    <div id="nt-open">OUVERTURE À 8H30</div>
     <div class="nt-ad">HELVETICA EXCHANGE · 19 RUE PIERRE-FATIO · GENÈVE</div>
+    <div id="nt-qr"><svg viewBox="0 0 31 31"><path fill="#1a1208" d="M1 1h7v1h-7z M12 1h1v1h-1z M14 1h1v1h-1z M17 1h4v1h-4z M23 1h7v1h-7z M1 2h1v1h-1z M7 2h1v1h-1z M10 2h1v1h-1z M12 2h1v1h-1z M14 2h3v1h-3z M19 2h1v1h-1z M21 2h1v1h-1z M23 2h1v1h-1z M29 2h1v1h-1z M1 3h1v1h-1z M3 3h3v1h-3z M7 3h1v1h-1z M10 3h1v1h-1z M13 3h2v1h-2z M17 3h3v1h-3z M23 3h1v1h-1z M25 3h3v1h-3z M29 3h1v1h-1z M1 4h1v1h-1z M3 4h3v1h-3z M7 4h1v1h-1z M12 4h1v1h-1z M14 4h3v1h-3z M19 4h2v1h-2z M23 4h1v1h-1z M25 4h3v1h-3z M29 4h1v1h-1z M1 5h1v1h-1z M3 5h3v1h-3z M7 5h1v1h-1z M10 5h1v1h-1z M12 5h1v1h-1z M14 5h2v1h-2z M17 5h1v1h-1z M19 5h1v1h-1z M23 5h1v1h-1z M25 5h3v1h-3z M29 5h1v1h-1z M1 6h1v1h-1z M7 6h1v1h-1z M9 6h3v1h-3z M14 6h2v1h-2z M18 6h4v1h-4z M23 6h1v1h-1z M29 6h1v1h-1z M1 7h7v1h-7z M9 7h1v1h-1z M11 7h1v1h-1z M13 7h1v1h-1z M15 7h1v1h-1z M17 7h1v1h-1z M19 7h1v1h-1z M21 7h1v1h-1z M23 7h7v1h-7z M12 8h2v1h-2z M15 8h1v1h-1z M18 8h2v1h-2z M1 9h1v1h-1z M4 9h1v1h-1z M6 9h2v1h-2z M9 9h2v1h-2z M13 9h1v1h-1z M16 9h1v1h-1z M20 9h1v1h-1z M22 9h1v1h-1z M24 9h1v1h-1z M5 10h2v1h-2z M9 10h3v1h-3z M15 10h2v1h-2z M18 10h1v1h-1z M21 10h3v1h-3z M26 10h1v1h-1z M29 10h1v1h-1z M1 11h1v1h-1z M3 11h2v1h-2z M7 11h1v1h-1z M9 11h1v1h-1z M17 11h1v1h-1z M20 11h1v1h-1z M22 11h1v1h-1z M26 11h3v1h-3z M1 12h3v1h-3z M6 12h1v1h-1z M8 12h2v1h-2z M12 12h1v1h-1z M15 12h2v1h-2z M19 12h1v1h-1z M21 12h1v1h-1z M24 12h1v1h-1z M27 12h2v1h-2z M2 13h1v1h-1z M4 13h2v1h-2z M7 13h2v1h-2z M10 13h4v1h-4z M17 13h3v1h-3z M21 13h4v1h-4z M26 13h1v1h-1z M28 13h2v1h-2z M2 14h1v1h-1z M4 14h1v1h-1z M9 14h1v1h-1z M12 14h2v1h-2z M16 14h1v1h-1z M20 14h2v1h-2z M2 15h2v1h-2z M5 15h4v1h-4z M10 15h3v1h-3z M16 15h2v1h-2z M22 15h8v1h-8z M1 16h1v1h-1z M3 16h1v1h-1z M9 16h1v1h-1z M12 16h4v1h-4z M17 16h2v1h-2z M20 16h1v1h-1z M22 16h1v1h-1z M25 16h2v1h-2z M28 16h1v1h-1z M5 17h1v1h-1z M7 17h1v1h-1z M9 17h3v1h-3z M14 17h5v1h-5z M22 17h1v1h-1z M28 17h1v1h-1z M2 18h1v1h-1z M4 18h1v1h-1z M8 18h1v1h-1z M11 18h3v1h-3z M16 18h1v1h-1z M22 18h3v1h-3z M26 18h1v1h-1z M29 18h1v1h-1z M1 19h1v1h-1z M6 19h5v1h-5z M13 19h2v1h-2z M18 19h2v1h-2z M24 19h2v1h-2z M28 19h2v1h-2z M4 20h3v1h-3z M8 20h1v1h-1z M13 20h2v1h-2z M16 20h4v1h-4z M21 20h1v1h-1z M23 20h1v1h-1z M28 20h2v1h-2z M1 21h1v1h-1z M3 21h1v1h-1z M5 21h1v1h-1z M7 21h2v1h-2z M10 21h1v1h-1z M13 21h1v1h-1z M15 21h1v1h-1z M17 21h1v1h-1z M21 21h5v1h-5z M27 21h1v1h-1z M9 22h3v1h-3z M13 22h2v1h-2z M16 22h2v1h-2z M20 22h2v1h-2z M25 22h1v1h-1z M27 22h3v1h-3z M1 23h7v1h-7z M10 23h2v1h-2z M13 23h4v1h-4z M19 23h1v1h-1z M21 23h1v1h-1z M23 23h1v1h-1z M25 23h1v1h-1z M28 23h1v1h-1z M1 24h1v1h-1z M7 24h1v1h-1z M9 24h2v1h-2z M13 24h2v1h-2z M17 24h1v1h-1z M21 24h1v1h-1z M25 24h4v1h-4z M1 25h1v1h-1z M3 25h3v1h-3z M7 25h1v1h-1z M12 25h2v1h-2z M15 25h2v1h-2z M19 25h1v1h-1z M21 25h5v1h-5z M28 25h1v1h-1z M1 26h1v1h-1z M3 26h3v1h-3z M7 26h1v1h-1z M9 26h1v1h-1z M12 26h2v1h-2z M15 26h3v1h-3z M20 26h1v1h-1z M23 26h5v1h-5z M29 26h1v1h-1z M1 27h1v1h-1z M3 27h3v1h-3z M7 27h1v1h-1z M10 27h2v1h-2z M14 27h2v1h-2z M25 27h3v1h-3z M29 27h1v1h-1z M1 28h1v1h-1z M7 28h1v1h-1z M10 28h2v1h-2z M14 28h1v1h-1z M16 28h1v1h-1z M20 28h3v1h-3z M24 28h1v1h-1z M28 28h1v1h-1z M1 29h7v1h-7z M9 29h1v1h-1z M11 29h1v1h-1z M13 29h1v1h-1z M21 29h3v1h-3z M26 29h1v1h-1z M28 29h1v1h-1z"/></svg></div>
+    <div class="qr-cap">helveticaexchange.ch</div>
   </section>
  </div>
 </div>
@@ -460,6 +539,55 @@ var CUR = [
   ['JPY','Yen · pour 100'],
   ['CAD','Dollar canadien']
 ];
+/* v3 : ruban trié — on retire les exotiques peu vendues, on garde Golfe/Maghreb/ILS (choix Fafa) */
+var TICK_OUT = {LKR:1,KES:1,NGN:1,GHS:1,ETB:1,XAF:1,XOF:1,XPF:1,ZAR:1,MUR:1,JMD:1,DOP:1,FJD:1,MOP:1,NPR:1,UZS:1,KZT:1,PEN:1,UYU:1,COP:1,CLP:1,BRL:1,ARS:1};
+/* v3 : clôtures de la VEILLE (vraies données Daric, lecture anonyme) pour les flèches boursières */
+var REFS = {};
+function loadRefs(){
+  var mid = new Date(); mid.setHours(0,0,0,0);
+  var iso = mid.toISOString();
+  var H2 = {apikey:CKEY, Authorization:'Bearer '+CKEY};
+  fetch(CLOUD+'/rest/v1/fx_rates?quote=eq.CHF&base=in.(EUR,USD,GBP,JPY,CAD)&ts=lt.'+iso+'&order=ts.desc&limit=80&select=base,rate',
+    {headers:H2}).then(function(r){return r.json();}).then(function(rows){
+      var i,b;
+      for(i=0;i<rows.length;i++){ b=rows[i].base; if(REFS[b]===undefined) REFS[b]=+rows[i].rate; }
+      renderBoard();
+    }).catch(function(){});
+  fetch(CLOUD+'/rest/v1/metal_spots?metal=eq.or&currency=eq.CHF&ts=lt.'+iso+'&order=ts.desc&limit=1&select=price_per_g',
+    {headers:H2}).then(function(r){return r.json();}).then(function(j){
+      if(j&&j[0]) { REFS.XAU=+j[0].price_per_g; renderBoard(); } }).catch(function(){});
+  fetch(CLOUD+'/rest/v1/metal_spots?metal=eq.argent&currency=eq.CHF&ts=lt.'+iso+'&order=ts.desc&limit=1&select=price_per_g',
+    {headers:H2}).then(function(r){return r.json();}).then(function(j){
+      if(j&&j[0]) { REFS.XAG=+j[0].price_per_g; renderBoard(); } }).catch(function(){});
+}
+function arrowFor(cur, ref){
+  if(!ref || !cur) return null;
+  var d = (cur-ref)/ref;
+  if(d > 0.0004) return {a:'▲', c:'up', p:'+'+(d*100).toFixed(2)+'%'};
+  if(d < -0.0004) return {a:'▼', c:'dn', p:(d*100).toFixed(2)+'%'};
+  return {a:'▬', c:'', p:'0.00%'};
+}
+/* v3 : compteur-odomètre — les chiffres roulent et s'arrêtent sur la valeur */
+function spinTo(el, target, dec){
+  if(!el) return;
+  var t0=Date.now(), dur=1150, from=target*(0.988+Math.random()*0.024);
+  (function st(){
+    var f=Math.min(1,(Date.now()-t0)/dur); f=1-Math.pow(1-f,3);
+    var v=from+(target-from)*f;
+    el.textContent=v.toFixed(dec);
+    if(f<1) setTimeout(st, 42);
+    else el.textContent=target.toFixed(dec);
+  })();
+}
+function spinAll(){
+  if(!model) return;
+  for(var i=0;i<CUR.length;i++){
+    var c=CUR[i][0], d=model.fx[c]; if(!d) continue;
+    var u=d.u||1;
+    spinTo(document.getElementById('b-'+c), d.a*u, 4);
+    spinTo(document.getElementById('s-'+c), d.v*u, 4);
+  }
+}
 /* drapeaux dessinés (SVG) — nets sur LED, taille des codes, reflet animé */
 var FLAGS = {
   EUR:'<svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#0a3a9e"/><g fill="#ffd76a"><circle cx="30" cy="9" r="1.9"/><circle cx="36.5" cy="10.7" r="1.9"/><circle cx="41.3" cy="15.5" r="1.9"/><circle cx="43" cy="22" r="1.9"/><circle cx="41.3" cy="28.5" r="1.9"/><circle cx="36.5" cy="33.3" r="1.9"/><circle cx="30" cy="35" r="1.9"/><circle cx="23.5" cy="33.3" r="1.9"/><circle cx="18.7" cy="28.5" r="1.9"/><circle cx="17" cy="22" r="1.9"/><circle cx="18.7" cy="15.5" r="1.9"/><circle cx="23.5" cy="10.7" r="1.9"/></g></svg>',
@@ -498,8 +626,10 @@ function renderBoard(){
     var u = d.u||1;
     var row=document.createElement('div'); row.className='row';
     var buy=f4(d.a*u), sell=f4(d.v*u);
+    var ar = arrowFor(d.mid, REFS[c[0]]);
+    var arh = ar ? '<span class="dta '+ar.c+'">'+ar.a+'</span>' : '';
     row.innerHTML =
-      '<div class="dev"><span class="flag">'+(FLAGS[c[0]]||'')+'<i></i></span><span><span class="code">'+c[0]+'</span>'+
+      '<div class="dev"><span class="flag">'+(FLAGS[c[0]]||'')+'<i></i></span><span><span class="code">'+c[0]+'</span>'+arh+
       '<div class="nm">'+c[1]+'</div></span></div>'+
       '<div class="buy" id="b-'+c[0]+'">'+buy+'</div>'+
       '<div class="sell" id="s-'+c[0]+'">'+sell+'</div>';
@@ -523,6 +653,13 @@ function renderBoard(){
     var eSet = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
     eSet('gpc-au-g', f2(og));
     eSet('gpc-ag-g', f2(ag));
+    /* flèches boursières vs veille sur le panneau or */
+    var dAu = arrowFor(og, REFS.XAU), dAg = arrowFor(ag, REFS.XAG);
+    var eAu = document.getElementById('gpd-au'), eAg = document.getElementById('gpd-ag');
+    if(eAu && dAu){ eAu.className='gp-delta '+dAu.c; eAu.innerHTML='<b>'+dAu.a+'</b><span>'+dAu.p+'</span>'; }
+    if(eAg && dAg){ eAg.className='gp-delta '+dAg.c; eAg.innerHTML='<b>'+dAg.a+'</b><span>'+dAg.p+'</span>'; }
+    var ng = document.getElementById('gw-val'); if(ng) ng.textContent = f2(og);
+    var ngd = document.getElementById('gw-dta'); if(ngd && dAu) ngd.textContent = ' '+dAu.p;
     var nv = document.getElementById('nt-val'), na = document.getElementById('nt-ar');
     var newOnce = Math.round(oz);
     if (window.__prevOnce && newOnce !== window.__prevOnce){
@@ -553,6 +690,7 @@ function renderTicker(){
   }
   for(i=0;i<model.all.length;i++){
     var a=model.all[i];
+    if(TICK_OUT[a[0]]) continue;              /* v3 : tri de Fafa */
     parts.push('<span class="ti"><b>'+a[0]+'</b><span>'+f4(a[1])+'</span></span><span class="tsep">◆</span>');
   }
   var html=parts.join('');
@@ -708,12 +846,26 @@ clock(); setInterval(clock,5000);
     path.style.transition='stroke-dashoffset 10.5s ease-in-out, opacity 1s';
     path.style.opacity='1'; path.style.strokeDashoffset='0';
     var t0=Date.now();
+    var carr=document.getElementById('carr');
     (function mv(){
       var f=Math.min(1,(Date.now()-t0)/10500);
       var pt=path.getPointAtLength(L*f);
       tip.setAttribute('cx',pt.x); tip.setAttribute('cy',pt.y); tip.setAttribute('opacity','.95');
       if(f<1) requestAnimationFrame(mv);
-      else setTimeout(function(){ path.style.opacity='0'; tip.setAttribute('opacity','0'); setTimeout(gen,1400); },1600);
+      else {
+        /* v3 : flèche orientée selon la pente finale — on sait si ça monte ou descend */
+        var p2=path.getPointAtLength(L*0.955);
+        var dx=pt.x-p2.x, dy=pt.y-p2.y, nn=Math.sqrt(dx*dx+dy*dy)||1; dx/=nn; dy/=nn;
+        var px=-dy, py=dx;
+        var Tx=pt.x+dx*46, Ty=pt.y+dy*46;
+        var Ax=pt.x+px*20, Ay=pt.y+py*20, Bx=pt.x-px*20, By=pt.y-py*20;
+        if(carr){
+          carr.setAttribute('points', Tx.toFixed(1)+','+Ty.toFixed(1)+' '+Ax.toFixed(1)+','+Ay.toFixed(1)+' '+Bx.toFixed(1)+','+By.toFixed(1));
+          carr.setAttribute('fill', dy<0 ? '#8ef08a' : '#ff8a7a');
+          carr.setAttribute('opacity','.95');
+        }
+        setTimeout(function(){ path.style.opacity='0'; tip.setAttribute('opacity','0'); if(carr) carr.setAttribute('opacity','0'); setTimeout(gen,1400); },1900);
+      }
     })();
   }
   gen();
@@ -759,12 +911,16 @@ var DECOR='assets/currency-panel.jpg', decorOk=false;
 var SC={rates:document.getElementById('sc-rates'), gold:document.getElementById('sc-gold'),
         media:document.getElementById('sc-media'), msg:document.getElementById('sc-msg'),
         goldpanel:document.getElementById('sc-goldpanel'),
-        billets:document.getElementById('sc-billets')};
+        billets:document.getElementById('sc-billets'),
+        goldwire:document.getElementById('sc-goldwire'),
+        stamp:document.getElementById('sc-stamp')};
 var cur='rates';
+var FULLB={goldpanel:1,billets:1,goldwire:1,stamp:1};
 function show(name){
   if(SC[cur]) SC[cur].classList.remove('on');
-  cur=name; SC[cur].classList.add('on');
-  document.body.className = (name==='goldpanel'||name==='billets') ? 'gpon' : '';
+  cur=name; if(SC[cur]) SC[cur].classList.add('on');
+  document.body.className = FULLB[name] ? 'gpon' : '';
+  if(name==='rates') setTimeout(spinAll, 350);   /* v3 : les chiffres roulent puis s'arretent */
 }
 function playMedia(m){
   var fr=document.getElementById('mframe'); fr.innerHTML='';
@@ -779,23 +935,29 @@ function playMedia(m){
     var pr=vd.play(); if(pr&&pr.catch) pr.catch(function(){});
   }
 }
+var hourWireDone = -1;
 function cycle(){
-  /* ordre AURÈLE (accroche → preuve → offre → accueil), tour = 60 s pile :
-     média 8 + taux 24 + or 18 + bienvenue 10 · sans média : 28+20+12 = 60 */
+  /* ordre AURÈLE : accroche 8 → preuve 24 → offre 16 → accueil 8 → poinçon 2,4 ≈ 60 s pile */
   var m=MEDIA.length? MEDIA[mIdx%MEDIA.length] : null;
   var useBillets = (decorOk===true);
   var useMedia = !useBillets && m && mediaOk[m.url]===true;
+  var hasHook = useBillets||useMedia;
   var seq=[];
   if(useBillets) seq.push(['billets',8000]);
   else if(useMedia) seq.push(['media',8000]);
-  var hasHook = useBillets||useMedia;
   seq.push(['rates', hasHook?24000:28000]);
-  seq.push(['gold*', hasHook?18000:20000]);
-  seq.push(['msg', hasHook?10000:12000]);
+  seq.push(['gold*', hasHook?16000:19000]);
+  seq.push(['msg', hasHook?8000:10000]);
+  seq.push(['stamp',2400]);
   var i=0;
   (function nx(){
     var s=seq[i%seq.length], name=s[0];
-    if(name==='gold*') name = panelOk ? 'goldpanel' : 'gold';
+    if(name==='gold*'){
+      var n=new Date();
+      if(gwPts.length>5 && hourWireDone!==n.getHours() && n.getMinutes()<3){
+        name='goldwire'; hourWireDone=n.getHours(); drawWire();
+      } else name = panelOk ? 'goldpanel' : 'gold';
+    }
     if(name==='media'){ playMedia(m); }
     show(name);
     i++;
@@ -805,12 +967,93 @@ function cycle(){
 }
 cycle();
 
+/* ═ v3 : LE FIL D'OR — courbe intraday réelle (metal_spots du jour, lecture anonyme) ═ */
+var gwPts=[];
+function loadIntraday(){
+  var mid=new Date(); mid.setHours(0,0,0,0);
+  fetch(CLOUD+'/rest/v1/metal_spots?metal=eq.or&currency=eq.CHF&ts=gte.'+mid.toISOString()+'&order=ts.asc&select=ts,price_per_g&limit=500',
+    {headers:{apikey:CKEY, Authorization:'Bearer '+CKEY}})
+  .then(function(r){return r.json();})
+  .then(function(rows){
+    if(rows && rows.length){
+      var i,out=[];
+      for(i=0;i<rows.length;i++) out.push([+new Date(rows[i].ts), +rows[i].price_per_g]);
+      gwPts=out;
+    }
+  }).catch(function(){});
+}
+loadIntraday(); setInterval(loadIntraday, 600000);
+function drawWire(){
+  if(gwPts.length<2) return;
+  var W=1800,H=900,P=70, i, mn=1e12, mx=-1e12, t0=gwPts[0][0], t1=gwPts[gwPts.length-1][0];
+  for(i=0;i<gwPts.length;i++){ if(gwPts[i][1]<mn)mn=gwPts[i][1]; if(gwPts[i][1]>mx)mx=gwPts[i][1]; }
+  if(mx-mn < 0.2){ var c=(mx+mn)/2; mn=c-0.1; mx=c+0.1; }
+  var d='';
+  for(i=0;i<gwPts.length;i++){
+    var x=P+(W-2*P)*(gwPts[i][0]-t0)/Math.max(1,(t1-t0));
+    var y=H-P-(H-2*P)*(gwPts[i][1]-mn)/(mx-mn);
+    d+=(i===0?'M':'L')+x.toFixed(1)+' '+y.toFixed(1);
+  }
+  var path=document.getElementById('gw-path'), tip=document.getElementById('gw-tip');
+  var eMin=document.getElementById('gw-min'), eMax=document.getElementById('gw-max');
+  if(eMin) eMin.textContent='min '+f2(mn); if(eMax) eMax.textContent='max '+f2(mx);
+  path.setAttribute('d',d);
+  var L=path.getTotalLength();
+  path.style.transition='none';
+  path.style.strokeDasharray=L+' '+L; path.style.strokeDashoffset=L;
+  void path.getBoundingClientRect();
+  path.style.transition='stroke-dashoffset 9s ease-in-out';
+  path.style.strokeDashoffset='0';
+  var t00=Date.now();
+  (function mv(){
+    var f=Math.min(1,(Date.now()-t00)/9000);
+    var pt=path.getPointAtLength(L*f);
+    tip.setAttribute('cx',pt.x); tip.setAttribute('cy',pt.y); tip.setAttribute('opacity','.95');
+    if(f<1 && cur==='goldwire') setTimeout(mv, LOWFX?50:25);
+  })();
+}
+
+/* ═ v3 : complication GMT — Tokyo · Londres · New York en alternance avec les horaires ═ */
+(function(){
+  var fs=document.querySelector('.fsub'); if(!fs) return;
+  var alt=document.createElement('div'); alt.className='fsub'; alt.style.display='none';
+  fs.parentNode.appendChild(alt);
+  function pill(name,open){ return '<span>'+name+' <span style="color:'+(open?'#7de87f':'#8a6b3a')+'">'+(open?'●':'○')+'</span></span>'; }
+  function upd(){
+    var now=new Date();
+    function mkt(off,o,c){ var g=now.getUTCHours()+now.getUTCMinutes()/60; var lh=(g+off+24)%24;
+      var wd=(now.getUTCDay()+((g+off)>=24?1:0))%7; return (wd>0&&wd<6)&&lh>=o&&lh<c; }
+    alt.innerHTML = pill('TOKYO',mkt(9,9,15)) +
+      '<span style="color:#c9963e">◆</span>' + pill('LONDRES',mkt(1,8,16.5)) +
+      '<span style="color:#c9963e">◆</span>' + pill('NEW YORK',mkt(-4,9.5,16));
+  }
+  upd(); setInterval(upd,60000);
+  var flip=false;
+  setInterval(function(){ flip=!flip; fs.style.display=flip?'none':'flex'; alt.style.display=flip?'flex':'none'; }, 12000);
+})();
+loadRefs();
+setInterval(loadRefs, 3600000);
+
 /* ── MODE NUIT 22h–6h : « L'or ne dort jamais » (idée signature AURÈLE) ── */
 function nightCheck(){
-  var h=new Date().getHours(), night=(h>=22||h<6);
+  var n=new Date(), h=n.getHours()+n.getMinutes()/60, day=n.getDay();
+  var openH=(day===6)?9:8.5;
+  var night=(h>=22||h<6);
+  var dawn=(!night && day!==0 && h>=6 && h<openH);
   var el=document.getElementById('sc-night');
-  if(night && !el.classList.contains('on')) el.classList.add('on');
-  if(!night && el.classList.contains('on')) el.classList.remove('on');
+  var t=document.querySelector('.nt-t'), o=document.getElementById('nt-open'), sg=document.querySelector('.nt-s');
+  if(night||dawn){
+    el.classList.add('on');
+    if(dawn){
+      if(t) t.textContent='BONJOUR GENÈVE · OR FIN 999.9';
+      if(o){ o.style.display='block'; o.textContent='OUVERTURE À '+(day===6?'9H00':'8H30'); }
+      if(sg) sg.textContent="L'or s'éveille · Gold awakens";
+    } else {
+      if(t) t.textContent="OR FIN 999.9 · CHF · L'ONCE";
+      if(o) o.style.display='none';
+      if(sg) sg.textContent="L'or ne dort jamais · Gold never sleeps";
+    }
+  } else el.classList.remove('on');
 }
 nightCheck(); setInterval(nightCheck, 60000);
 </script>
