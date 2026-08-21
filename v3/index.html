@@ -575,6 +575,7 @@ var TICK_IN = {EUR:1,USD:1,GBP:1,JPY:1,CAD:1,AUD:1,NZD:1,
   MAD:1,DZD:1,TND:1,IRR:1,MXN:1};
 /* v3 : clôtures de la VEILLE (vraies données Daric, lecture anonyme) pour les flèches boursières */
 var REFS = {};
+var BREF = null;   /* v3.6 : la grille AFFICHÉE photographiée hier 19h — {CODE:[achat,vente]} */
 function loadRefs(){
   /* référence = dernière CLÔTURE (23h Genève ≈ 17h New York), convention Kitco/Bloomberg */
   var mid = new Date(); mid.setHours(23,0,0,0);
@@ -599,7 +600,7 @@ function loadRefs(){
     var n=0; for(i=0;i<FXK.length;i++) if(REFS[FXK[i]]!==undefined) n++;
     return n;
   };
-  (function tryDay(n){
+  var tryDay = function(n){
     if(n>4) return;
     var d0=new Date(); d0.setDate(d0.getDate()-n);
     var a=new Date(d0); a.setHours(18,0,0,0);
@@ -608,7 +609,23 @@ function loadRefs(){
       {headers:H2}).then(function(r){return r.json();}).then(function(rows){
         if(fxApply(rows||[]) < 5) tryDay(n+1);
       }).catch(function(){ tryDay(n+1); });
-  })(1);
+  };
+  /* v3.6 — LA TABLE DE FAFA : la photo de la grille AFFICHÉE prise chaque soir à 19h
+     (vitrine_board_snapshots). La flèche compare l'affichage actuel à cette photo :
+     affichage contre affichage, jamais le marché caché. Repli : mids d'hier 18-19h. */
+  fetch(CLOUD+'/rest/v1/vitrine_board_snapshots?order=jour.desc&limit=2&select=jour,board',
+    {headers:H2}).then(function(r){return r.json();}).then(function(j){
+      if(j && j.length){
+        var today = new Date(); today.setHours(0,0,0,0);
+        var pick = null, i;
+        for(i=0;i<j.length;i++){
+          if(new Date(j[i].jour+'T12:00:00') < today){ pick=j[i]; break; }
+        }
+        if(!pick) pick=j[0];                     /* 1er jour de vie : la photo d'amorce */
+        if(pick && pick.board){ BREF = pick.board; renderBoard(); return; }
+      }
+      tryDay(1);
+    }).catch(function(){ tryDay(1); });
   /* clôture = MÉDIANE des 7 derniers points avant 23h : robuste aux points aberrants
      (unité once/kilo glissée dans la colonne au gramme) sans toucher à la base. */
   var medianRef = function(j){
@@ -691,7 +708,11 @@ function renderBoard(){
     var u = d.u||1;
     var row=document.createElement('div'); row.className='row';
     var buy=f4(d.a*u), sell=f4(d.v*u);
-    var ar = arrowFor(d.mid, REFS[c[0]], 0.0002);  /* devises : seuil fin ±0,02% */
+    /* v3.6 : la flèche décrit LE TAUX AFFICHÉ — achat actuel vs achat photographié hier 19h.
+       La grille bouge par crans : le moindre cran compte. Repli : mid vs mid d'hier 18-19h. */
+    var ar = (BREF && BREF[c[0]])
+      ? arrowFor(d.a*u, +BREF[c[0]][0], 0.000001)
+      : arrowFor(d.mid, REFS[c[0]], 0.0002);
     var arh = ar ? '<span class="dta '+ar.c+'">'+ar.a+'</span>' : '';
     row.innerHTML =
       '<div class="dev"><span class="flag">'+(FLAGS[c[0]]||'')+'<i></i></span><span><span class="code">'+c[0]+'</span>'+arh+
@@ -705,6 +726,18 @@ function renderBoard(){
       document.getElementById('s-'+c[0]).classList.add('chg');
     }
     lastVals[c[0]]=k;
+  }
+  /* v3.6 : baromètre du jour — TOUTE la grille (49 devises) vs la photo d'hier 19h */
+  if(BREF){
+    var bu=0,bd=0,bf=0,bk,bD,cA,rA,dd;
+    for(bk in model.fx){
+      if(!BREF[bk]) continue;
+      bD=model.fx[bk]; cA=bD.a*(bD.u||1); rA=+BREF[bk][0];
+      if(!rA || !cA) continue;
+      dd=(cA-rA)/rA;
+      if(dd>0.000001) bu++; else if(dd<-0.000001) bd++; else bf++;
+    }
+    window.__baro={u:bu,d:bd,f:bf};
   }
   /* or & argent */
   document.getElementById('gau-g').textContent  = f2(model.xau/1000);
@@ -1118,8 +1151,24 @@ function drawWire(){
       '<span style="color:#c9963e">◆</span>' + pill('NEW YORK',mkt(-4,9.5,16));
   }
   upd(); setInterval(upd,60000);
-  var flip=false;
-  setInterval(function(){ flip=!flip; fs.style.display=flip?'none':'flex'; alt.style.display=flip?'flex':'none'; }, 12000);
+  /* v3.6 : baromètre du jour — 3e panneau du pied de page (signature maison) */
+  var baro=document.createElement('div'); baro.className='fsub'; baro.style.display='none';
+  fs.parentNode.appendChild(baro);
+  function updBaro(){
+    var b=window.__baro; if(!b) return;
+    baro.innerHTML = '<span>NOS TAUX AUJOURD&rsquo;HUI</span><span style="color:#c9963e">◆</span>'
+      +'<span style="color:#7de87f">▲ '+b.u+'</span>'
+      +'<span style="color:#ff6357">▼ '+b.d+'</span>'
+      +'<span style="color:#dfae62">▬ '+b.f+'</span>'
+      +'<span style="color:#c9963e">◆</span><span class="vsv">vs hier 19h</span>';
+  }
+  var ph=0, panes=[fs,alt,baro];
+  setInterval(function(){
+    ph=(ph+1)%3;
+    if(ph===2 && !window.__baro) ph=0;
+    for(var i=0;i<3;i++) panes[i].style.display = (i===ph) ? 'flex' : 'none';
+    if(ph===2) updBaro();
+  }, 12000);
 })();
 loadRefs();
 setInterval(loadRefs, 3600000);
