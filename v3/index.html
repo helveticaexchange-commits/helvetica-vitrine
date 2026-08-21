@@ -608,11 +608,12 @@ function loadRefs(){
     {headers:H2}).then(function(r){return r.json();}).then(function(j){
       var m=medianRef(j); if(m) { REFS.XAG=m; renderBoard(); } }).catch(function(){});
 }
-function arrowFor(cur, ref){
+function arrowFor(cur, ref, th){
   if(!ref || !cur) return null;
+  th = th || 0.0005;              /* métaux : ±0,05% ; devises : ±0,02% (seuil passé en 3e argument) */
   var d = (cur-ref)/ref;
-  if(d > 0.0005) return {a:'▲', c:'up', p:'+'+(d*100).toFixed(2)+'%'};
-  if(d < -0.0005) return {a:'▼', c:'dn', p:(d*100).toFixed(2)+'%'};
+  if(d > th) return {a:'▲', c:'up', p:'+'+(d*100).toFixed(2)+'%'};
+  if(d < -th) return {a:'▼', c:'dn', p:(d*100).toFixed(2)+'%'};
   return {a:'▬', c:'', p:'0.00%'};
 }
 /* v3 : compteur-odomètre — les chiffres roulent et s'arrêtent sur la valeur */
@@ -674,7 +675,7 @@ function renderBoard(){
     var u = d.u||1;
     var row=document.createElement('div'); row.className='row';
     var buy=f4(d.a*u), sell=f4(d.v*u);
-    var ar = arrowFor(d.mid, REFS[c[0]]);
+    var ar = arrowFor(d.mid, REFS[c[0]], 0.0002);  /* devises : seuil fin ±0,02% */
     var arh = ar ? '<span class="dta '+ar.c+'">'+ar.a+'</span>' : '';
     row.innerHTML =
       '<div class="dev"><span class="flag">'+(FLAGS[c[0]]||'')+'<i></i></span><span><span class="code">'+c[0]+'</span>'+arh+
