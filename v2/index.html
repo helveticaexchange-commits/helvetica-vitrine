@@ -543,6 +543,12 @@ function renderBoard(){
 
 /* ── ruban : toutes les devises live + métaux + crypto ── */
 var cryptoTick = [];
+/* v2.7 : LISTE BLANCHE (verdict Fafa 21.08) — seules les devises travaillées entrent au défilé. */
+var TICK_IN = {EUR:1,USD:1,GBP:1,JPY:1,CAD:1,AUD:1,NZD:1,
+  SEK:1,NOK:1,DKK:1,PLN:1,CZK:1,HUF:1,
+  CNY:1,HKD:1,SGD:1,KRW:1,TWD:1,THB:1,INR:1,
+  AED:1,SAR:1,QAR:1,KWD:1,BHD:1,OMR:1,JOD:1,ILS:1,TRY:1,EGP:1,
+  MAD:1,DZD:1,TND:1,IRR:1,MXN:1};
 function renderTicker(){
   if(!model) return;
   var parts=[], i;
@@ -553,6 +559,7 @@ function renderTicker(){
   }
   for(i=0;i<model.all.length;i++){
     var a=model.all[i];
+    if(!TICK_IN[a[0]]) continue;              /* liste blanche de Fafa */
     parts.push('<span class="ti"><b>'+a[0]+'</b><span>'+f4(a[1])+'</span></span><span class="tsep">◆</span>');
   }
   var html=parts.join('');
