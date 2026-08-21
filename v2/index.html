@@ -165,10 +165,11 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
 .ti span{font-size:55px;color:#fff0c0}
 .tsep{color:#c9963e;font-size:38px}
 /* ── PAGE OR « PANNEAU RÉEL » plein écran (image validée + cours live incrustés) ── */
-#sc-goldpanel{position:absolute;inset:0;z-index:8;opacity:0;transition:opacity 1.1s ease;
-  pointer-events:none;background:#241505}
+#sc-goldpanel{position:absolute;left:0;top:0;width:2100px;height:2100px;z-index:8;opacity:0;
+  transition:opacity 1.1s ease;pointer-events:none;background-color:#241505;
+  background-size:cover;background-position:center}
 #sc-goldpanel.on{opacity:1}
-#gp-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#gp-img{position:absolute;left:0;top:0;width:2100px;height:2100px;object-fit:cover}
 .gp-cell{position:absolute;width:39.8%;height:7.8%;display:flex;align-items:center;justify-content:center;
   font-variant-numeric:tabular-nums;font-family:'Helvetica Neue',Arial,sans-serif}
 .gp-cell b{font-size:132px;font-weight:600;color:#fff3dd;
@@ -178,10 +179,11 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
 body.gpon header,body.gpon .hrule,body.gpon #tickw,body.gpon footer,
 body.gpon .frame,body.gpon .corn{opacity:0;transition:opacity 1s ease}
 /* ── PAGE BILLETS : écrin généré + VRAIS billets composés par la page ── */
-#sc-billets{position:absolute;inset:0;z-index:8;opacity:0;transition:opacity 1.1s ease;
-  pointer-events:none;background:#241505}
+#sc-billets{position:absolute;left:0;top:0;width:2100px;height:2100px;z-index:8;opacity:0;
+  transition:opacity 1.1s ease;pointer-events:none;background-color:#241505;
+  background-size:cover;background-position:center}
 #sc-billets.on{opacity:1}
-#bl-decor{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#bl-decor{position:absolute;left:0;top:0;width:2100px;height:2100px;object-fit:cover}
 #bl-fan{position:absolute;left:12%;top:29.5%;width:76%;
   filter:drop-shadow(0 34px 60px rgba(0,0,0,.6))}
 /* ── MODE NUIT 22h–6h « L'or ne dort jamais » ── */
@@ -734,7 +736,10 @@ var PANEL='assets/gold-panel.jpg', panelOk=false;
     im.src=mm.url;
   })(m2); }
   var gp=new Image();
-  gp.onload=function(){ panelOk=true; document.getElementById('gp-img').src=PANEL; };
+  gp.onload=function(){ panelOk=true;
+    document.getElementById('gp-img').src=PANEL;
+    document.getElementById('sc-goldpanel').style.backgroundImage="url('"+PANEL+"')";
+  };
   gp.onerror=function(){ panelOk=false; };
   gp.src=PANEL;
 })();
@@ -742,7 +747,10 @@ var PANEL='assets/gold-panel.jpg', panelOk=false;
 var DECOR='assets/currency-panel.jpg', decorOk=false;
 (function(){
   var d=new Image();
-  d.onload=function(){ decorOk=true; document.getElementById('bl-decor').src=DECOR; };
+  d.onload=function(){ decorOk=true;
+    document.getElementById('bl-decor').src=DECOR;
+    document.getElementById('sc-billets').style.backgroundImage="url('"+DECOR+"')";
+  };
   d.onerror=function(){ decorOk=false; };
   d.src=DECOR;
 })();
