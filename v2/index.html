@@ -91,8 +91,14 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
 .row:not(:last-child):after{content:'';position:absolute;left:20px;right:20px;bottom:-2px;height:2px;
   background:linear-gradient(90deg,transparent,rgba(255,214,106,.42),transparent)}
 .dev{display:flex;align-items:center}
-.dev .flag{margin-right:32px}
-.flag{font-size:95px;line-height:1;filter:drop-shadow(0 3px 14px rgba(0,0,0,.45))}
+.dev .flag{margin-right:38px}
+.flag{width:132px;height:96px;border-radius:10px;overflow:hidden;flex:none;position:relative;
+  box-shadow:0 3px 16px rgba(0,0,0,.5), 0 0 0 2px rgba(255,214,106,.4)}
+.flag svg{display:block;width:100%;height:100%}
+.flag i{position:absolute;inset:0;display:block;
+  background:linear-gradient(115deg,transparent 32%,rgba(255,255,255,.42) 50%,transparent 68%) no-repeat;
+  background-size:230% 100%;background-position:190% 0;animation:sheen 7.5s linear infinite}
+@keyframes sheen{0%,66%{background-position:190% 0}84%,100%{background-position:-90% 0}}
 .code{font-size:92px;color:#fff0c0;letter-spacing:.05em;font-weight:600;
   text-shadow:0 0 30px rgba(255,200,80,.55)}
 .nm{font-size:32px;color:#e8c078;letter-spacing:.09em;font-family:Georgia,serif;margin-top:6px;white-space:nowrap}
@@ -150,16 +156,44 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
   background:linear-gradient(180deg,rgba(60,36,10,.55),rgba(42,24,6,.55));
   box-shadow:0 0 34px rgba(255,190,80,.18) inset}
 #tick{position:absolute;top:0;height:100%;display:flex;align-items:center;white-space:nowrap;will-change:transform}
-.ti{display:inline-flex;align-items:baseline;gap:22px;padding:0 44px;font-variant-numeric:tabular-nums}
+.ti{display:inline-flex;align-items:baseline;padding:0 44px;font-variant-numeric:tabular-nums}
+.ti b{margin-right:24px}
 .ti b{font-size:55px;color:#ffd76a;letter-spacing:.06em;text-shadow:0 0 18px rgba(255,190,80,.5)}
 .ti span{font-size:55px;color:#fff0c0}
 .tsep{color:#c9963e;font-size:38px}
+/* ── PAGE OR « PANNEAU RÉEL » plein écran (image validée + cours live incrustés) ── */
+#sc-goldpanel{position:absolute;inset:0;z-index:8;opacity:0;transition:opacity 1.1s ease;
+  pointer-events:none;background:#241505}
+#sc-goldpanel.on{opacity:1}
+#gp-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.gp-cell{position:absolute;width:39.8%;height:7.8%;display:flex;align-items:center;justify-content:center;
+  font-variant-numeric:tabular-nums;font-family:'Helvetica Neue',Arial,sans-serif}
+.gp-cell b{font-size:138px;font-weight:600;color:#fff3dd;
+  text-shadow:0 0 36px rgba(255,236,190,.7),0 0 9px rgba(255,246,220,.9)}
+.gp-cell .u{font-size:52px;color:#ffd76a;margin-left:30px;letter-spacing:.08em;
+  text-shadow:0 0 16px rgba(255,190,80,.55)}
+body.gpon header,body.gpon .hrule,body.gpon #tickw,body.gpon footer,
+body.gpon .frame,body.gpon .corn{opacity:0;transition:opacity 1s ease}
+/* ── MODE NUIT 22h–6h « L'or ne dort jamais » ── */
+#sc-night{position:absolute;inset:0;z-index:9;background:#060402;opacity:0;transition:opacity 2.2s ease;
+  pointer-events:none;text-align:center}
+#sc-night.on{opacity:1}
+.nt-t{padding-top:330px;font-size:62px;letter-spacing:.48em;color:#c9963e;font-family:Georgia,serif}
+.nt-v{margin-top:70px;font-size:330px;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;
+  background:linear-gradient(180deg,#fff3cf 6%,#ffd76a 46%,#b8860b 92%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:nbr 6s ease-in-out infinite}
+@keyframes nbr{0%,100%{filter:drop-shadow(0 0 26px rgba(255,200,80,.25))}50%{filter:drop-shadow(0 0 90px rgba(255,200,80,.6))}}
+.nt-u{margin-top:34px;font-size:50px;letter-spacing:.4em;color:#dfae62;font-family:Georgia,serif}
+#nt-ar{font-size:110px;vertical-align:middle;margin-left:36px}
+.nt-s{position:absolute;left:0;right:0;bottom:225px;font-size:56px;letter-spacing:.14em;color:#ffe2a0}
+.nt-ad{position:absolute;left:0;right:0;bottom:135px;font-size:33px;letter-spacing:.3em;color:#8a6b3a;font-family:Georgia,serif}
 /* ── pied ── */
 footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-align:center}
 .faddr{font-size:46px;letter-spacing:.28em;color:#ffe2a0;font-family:Georgia,serif;text-shadow:0 0 22px rgba(255,190,80,.5)}
 .fsub{margin-top:26px;display:flex;justify-content:center;align-items:center;
-  font-size:37px;letter-spacing:.2em;color:#dfae62;font-family:Georgia,serif}
-.fsub>*{margin:0 17px}
+  font-size:30px;letter-spacing:.14em;color:#dfae62;font-family:Georgia,serif;white-space:nowrap}
+.fsub>*{margin:0 13px;white-space:nowrap}
 .dot{width:26px;height:26px;border-radius:50%;background:#ffd76a;box-shadow:0 0 22px #ffcf5e;animation:blink 2.1s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
 </style>
@@ -201,11 +235,11 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
         <div class="hs">Nous vendons<small>We sell</small></div>
       </div>
       <div id="rows">
-        <div class="row"><div class="dev"><span class="flag">🇪🇺</span><span><span class="code">EUR</span><div class="nm">Euro</div></span></div><div class="buy">0.9140</div><div class="sell">0.9500</div></div>
-        <div class="row"><div class="dev"><span class="flag">🇺🇸</span><span><span class="code">USD</span><div class="nm">Dollar US</div></span></div><div class="buy">0.7720</div><div class="sell">0.8180</div></div>
-        <div class="row"><div class="dev"><span class="flag">🇬🇧</span><span><span class="code">GBP</span><div class="nm">Livre sterling</div></span></div><div class="buy">1.0550</div><div class="sell">1.1250</div></div>
-        <div class="row"><div class="dev"><span class="flag">🇯🇵</span><span><span class="code">JPY</span><div class="nm">Yen · pour 100</div></span></div><div class="buy">0.4820</div><div class="sell">0.5330</div></div>
-        <div class="row"><div class="dev"><span class="flag">🇨🇦</span><span><span class="code">CAD</span><div class="nm">Dollar canadien</div></span></div><div class="buy">0.5520</div><div class="sell">0.6080</div></div>
+        <div class="row"><div class="dev"><span class="flag"><svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#0a3a9e"/><g fill="#ffd76a"><circle cx="30" cy="9" r="1.9"/><circle cx="36.5" cy="10.7" r="1.9"/><circle cx="41.3" cy="15.5" r="1.9"/><circle cx="43" cy="22" r="1.9"/><circle cx="41.3" cy="28.5" r="1.9"/><circle cx="36.5" cy="33.3" r="1.9"/><circle cx="30" cy="35" r="1.9"/><circle cx="23.5" cy="33.3" r="1.9"/><circle cx="18.7" cy="28.5" r="1.9"/><circle cx="17" cy="22" r="1.9"/><circle cx="18.7" cy="15.5" r="1.9"/><circle cx="23.5" cy="10.7" r="1.9"/></g></svg><i></i></span><span><span class="code">EUR</span><div class="nm">Euro</div></span></div><div class="buy">0.9170</div><div class="sell">0.9530</div></div>
+        <div class="row"><div class="dev"><span class="flag"><svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#B22234"/><g fill="#fff"><rect y="3.4" width="60" height="3.4"/><rect y="10.2" width="60" height="3.4"/><rect y="17" width="60" height="3.4"/><rect y="23.8" width="60" height="3.4"/><rect y="30.6" width="60" height="3.4"/><rect y="37.4" width="60" height="3.4"/></g><rect width="26" height="20.4" fill="#3C3B6E"/><g fill="#fff"><circle cx="4" cy="4" r="1.3"/><circle cx="9" cy="4" r="1.3"/><circle cx="14" cy="4" r="1.3"/><circle cx="19" cy="4" r="1.3"/><circle cx="24" cy="4" r="1.3"/><circle cx="6.5" cy="8" r="1.3"/><circle cx="11.5" cy="8" r="1.3"/><circle cx="16.5" cy="8" r="1.3"/><circle cx="21.5" cy="8" r="1.3"/><circle cx="4" cy="12" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="14" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/><circle cx="24" cy="12" r="1.3"/><circle cx="6.5" cy="16" r="1.3"/><circle cx="11.5" cy="16" r="1.3"/><circle cx="16.5" cy="16" r="1.3"/><circle cx="21.5" cy="16" r="1.3"/></g></svg><i></i></span><span><span class="code">USD</span><div class="nm">Dollar US</div></span></div><div class="buy">0.7770</div><div class="sell">0.8230</div></div>
+        <div class="row"><div class="dev"><span class="flag"><svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#012169"/><path d="M0 0L60 44M60 0L0 44" stroke="#fff" stroke-width="8.5"/><path d="M0 0L60 44M60 0L0 44" stroke="#C8102E" stroke-width="3.6"/><path d="M30 0V44M0 22H60" stroke="#fff" stroke-width="14"/><path d="M30 0V44M0 22H60" stroke="#C8102E" stroke-width="8"/></svg><i></i></span><span><span class="code">GBP</span><div class="nm">Livre sterling</div></span></div><div class="buy">1.0600</div><div class="sell">1.1300</div></div>
+        <div class="row"><div class="dev"><span class="flag"><svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#fff"/><circle cx="30" cy="22" r="11.5" fill="#BC002D"/></svg><i></i></span><span><span class="code">JPY</span><div class="nm">Yen · pour 100</div></span></div><div class="buy">0.4820</div><div class="sell">0.5330</div></div>
+        <div class="row"><div class="dev"><span class="flag"><svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#fff"/><rect width="15" height="44" fill="#d52b1e"/><rect x="45" width="15" height="44" fill="#d52b1e"/><path fill="#d52b1e" d="M30 8l2.8 5.6 4.6-2.6-1.8 6.4 5.6-1-2.8 4.6 5.6 2-4.6 3.6 1.8 4.6-5.6-1.8-.8 5.6h-1.6l-.8-5.6-5.6 1.8 1.8-4.6-4.6-3.6 5.6-2-2.8-4.6 5.6 1-1.8-6.4 4.6 2.6z"/></svg><i></i></span><span><span class="code">CAD</span><div class="nm">Dollar canadien</div></span></div><div class="buy">0.5520</div><div class="sell">0.6080</div></div>
       </div>
     </section>
 
@@ -251,7 +285,8 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
         <span>Hoş geldiniz</span>
       </div>
       <div class="mrule"></div>
-      <div class="wttl" style="font-size:64px;letter-spacing:.3em;color:#ffd76a">HELVETICA EXCHANGE · GENÈVE</div>
+      <div style="font-size:46px;letter-spacing:.2em;color:#ffe2a0;font-family:Georgia,serif">Genève parle votre langue · Geneva speaks your language</div>
+      <div class="wttl" style="font-size:58px;letter-spacing:.3em;color:#ffd76a;margin-top:36px">HELVETICA EXCHANGE · GENÈVE</div>
     </section>
   </main>
 
@@ -268,6 +303,22 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
 
   <div class="frame"></div>
   <div class="corn c1"></div><div class="corn c2"></div><div class="corn c3"></div><div class="corn c4"></div>
+
+  <!-- PAGE OR « PANNEAU RÉEL » — image validée plein écran + cours live dans les cellules -->
+  <section id="sc-goldpanel">
+    <img id="gp-img" alt="">
+    <div class="gp-cell" style="left:42.7%;top:29.2%"><b id="gpc-au-g">117.40</b><span class="u">CHF/g</span></div>
+    <div class="gp-cell" style="left:42.7%;top:40.1%"><b id="gpc-ag-g">1.78</b><span class="u">CHF/g</span></div>
+  </section>
+
+  <!-- MODE NUIT 22h–6h « L'or ne dort jamais » -->
+  <section id="sc-night">
+    <div class="nt-t">OR FIN 999.9 · CHF · L'ONCE</div>
+    <div class="nt-v"><span id="nt-val">3'652</span><span id="nt-ar" style="color:#8ef08a">▲</span></div>
+    <div class="nt-u">COURS EN DIRECT · LIVE</div>
+    <div class="nt-s">L'or ne dort jamais · Gold never sleeps</div>
+    <div class="nt-ad">HELVETICA EXCHANGE · 19 RUE PIERRE-FATIO · GENÈVE</div>
+  </section>
  </div>
 </div>
 
@@ -386,21 +437,29 @@ var CLOUD = 'https://mgqfgevbtjsfoxjogvcq.supabase.co';
 var CKEY  = 'sb_publishable_GA-lHwr-eZ39N7FNX8u81w_wPnCXHpg';
 
 var CUR = [
-  ['EUR','Euro','🇪🇺'],
-  ['USD','Dollar US','🇺🇸'],
-  ['GBP','Livre sterling','🇬🇧'],
-  ['JPY','Yen · pour 100','🇯🇵'],
-  ['CAD','Dollar canadien','🇨🇦']
+  ['EUR','Euro'],
+  ['USD','Dollar US'],
+  ['GBP','Livre sterling'],
+  ['JPY','Yen · pour 100'],
+  ['CAD','Dollar canadien']
 ];
+/* drapeaux dessinés (SVG) — nets sur LED, taille des codes, reflet animé */
+var FLAGS = {
+  EUR:'<svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#0a3a9e"/><g fill="#ffd76a"><circle cx="30" cy="9" r="1.9"/><circle cx="36.5" cy="10.7" r="1.9"/><circle cx="41.3" cy="15.5" r="1.9"/><circle cx="43" cy="22" r="1.9"/><circle cx="41.3" cy="28.5" r="1.9"/><circle cx="36.5" cy="33.3" r="1.9"/><circle cx="30" cy="35" r="1.9"/><circle cx="23.5" cy="33.3" r="1.9"/><circle cx="18.7" cy="28.5" r="1.9"/><circle cx="17" cy="22" r="1.9"/><circle cx="18.7" cy="15.5" r="1.9"/><circle cx="23.5" cy="10.7" r="1.9"/></g></svg>',
+  USD:'<svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#B22234"/><g fill="#fff"><rect y="3.4" width="60" height="3.4"/><rect y="10.2" width="60" height="3.4"/><rect y="17" width="60" height="3.4"/><rect y="23.8" width="60" height="3.4"/><rect y="30.6" width="60" height="3.4"/><rect y="37.4" width="60" height="3.4"/></g><rect width="26" height="20.4" fill="#3C3B6E"/><g fill="#fff"><circle cx="4" cy="4" r="1.3"/><circle cx="9" cy="4" r="1.3"/><circle cx="14" cy="4" r="1.3"/><circle cx="19" cy="4" r="1.3"/><circle cx="24" cy="4" r="1.3"/><circle cx="6.5" cy="8" r="1.3"/><circle cx="11.5" cy="8" r="1.3"/><circle cx="16.5" cy="8" r="1.3"/><circle cx="21.5" cy="8" r="1.3"/><circle cx="4" cy="12" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="14" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/><circle cx="24" cy="12" r="1.3"/><circle cx="6.5" cy="16" r="1.3"/><circle cx="11.5" cy="16" r="1.3"/><circle cx="16.5" cy="16" r="1.3"/><circle cx="21.5" cy="16" r="1.3"/></g></svg>',
+  GBP:'<svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#012169"/><path d="M0 0L60 44M60 0L0 44" stroke="#fff" stroke-width="8.5"/><path d="M0 0L60 44M60 0L0 44" stroke="#C8102E" stroke-width="3.6"/><path d="M30 0V44M0 22H60" stroke="#fff" stroke-width="14"/><path d="M30 0V44M0 22H60" stroke="#C8102E" stroke-width="8"/></svg>',
+  JPY:'<svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#fff"/><circle cx="30" cy="22" r="11.5" fill="#BC002D"/></svg>',
+  CAD:'<svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#fff"/><rect width="15" height="44" fill="#d52b1e"/><rect x="45" width="15" height="44" fill="#d52b1e"/><path fill="#d52b1e" d="M30 8l2.8 5.6 4.6-2.6-1.8 6.4 5.6-1-2.8 4.6 5.6 2-4.6 3.6 1.8 4.6-5.6-1.8-.8 5.6h-1.6l-.8-5.6-5.6 1.8 1.8-4.6-4.6-3.6 5.6-2-2.8-4.6 5.6 1-1.8-6.4 4.6 2.6z"/></svg>'
+};
 
-/* instantané de secours (valeurs réelles du 20.08.2026 13:38) */
-var SNAP = {ts:'2026-08-20T13:38:03Z', xau:114931.8, xag:1720.8, fx:{
-  EUR:{mid:0.932895,u:1,a:0.914,v:0.95},
-  USD:{mid:0.79853,u:1,a:0.772,v:0.818},
-  GBP:{mid:1.088991,u:1,a:1.055,v:1.125},
+/* instantané de secours (valeurs réelles du 21.08.2026 08:52) */
+var SNAP = {ts:'2026-08-21T06:52:00Z', xau:117402, xag:1775, fx:{
+  EUR:{mid:0.9358,u:1,a:0.917,v:0.953},
+  USD:{mid:0.8006,u:1,a:0.777,v:0.823},
+  GBP:{mid:1.0930,u:1,a:1.06,v:1.13},
   JPY:{mid:0.005031,u:100,a:0.00482,v:0.00533},
-  CAD:{mid:0.57972,u:1,a:0.552,v:0.608}
-}, all:[['AED',0.2187],['AUD',0.5705],['CAD',0.5797],['CNY',0.1188],['CZK',0.0381],['DKK',0.1251],['EUR',0.9329],['GBP',1.089],['HKD',0.1023],['HUF',0.2402],['INR',0.9143],['JPY',0.5031],['MAD',0.0885],['PLN',0.2195],['SAR',0.2129],['SEK',0.0842],['SGD',0.6212],['THB',0.0247],['TND',0.2734],['TRY',0.0165],['USD',0.7985]]};
+  CAD:{mid:0.5806,u:1,a:0.552,v:0.608}
+}, all:[['AED',0.2187],['AUD',0.5705],['CAD',0.5806],['CNY',0.1188],['CZK',0.0381],['DKK',0.1251],['EUR',0.9358],['GBP',1.093],['HKD',0.1023],['HUF',0.2402],['INR',0.9143],['JPY',0.5031],['MAD',0.0885],['PLN',0.2195],['SAR',0.2129],['SEK',0.0842],['SGD',0.6212],['THB',0.0247],['TND',0.2734],['TRY',0.0165],['USD',0.8006]]};
 
 var model = null;          /* {fx:{code:{mid,u,a,v}}, xau, xag, all:[[code,midU]], ts, live} */
 var lastVals = {};
@@ -423,7 +482,7 @@ function renderBoard(){
     var row=document.createElement('div'); row.className='row';
     var buy=f4(d.a*u), sell=f4(d.v*u);
     row.innerHTML =
-      '<div class="dev"><span class="flag">'+c[2]+'</span><span><span class="code">'+c[0]+'</span>'+
+      '<div class="dev"><span class="flag">'+(FLAGS[c[0]]||'')+'<i></i></span><span><span class="code">'+c[0]+'</span>'+
       '<div class="nm">'+c[1]+'</div></span></div>'+
       '<div class="buy" id="b-'+c[0]+'">'+buy+'</div>'+
       '<div class="sell" id="s-'+c[0]+'">'+sell+'</div>';
@@ -441,6 +500,21 @@ function renderBoard(){
   document.getElementById('gau-kg').textContent = swiss(model.xau);
   document.getElementById('gag-g').textContent  = f2(model.xag/1000);
   document.getElementById('gag-kg').textContent = swiss(model.xag);
+  /* cellules du panneau réel + mode nuit */
+  try{
+    var og = model.xau/1000, oz = og*31.1034768, ag = model.xag/1000;
+    var eSet = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
+    eSet('gpc-au-g', f2(og));
+    eSet('gpc-ag-g', f2(ag));
+    var nv = document.getElementById('nt-val'), na = document.getElementById('nt-ar');
+    var newOnce = Math.round(oz);
+    if (window.__prevOnce && newOnce !== window.__prevOnce){
+      na.textContent = newOnce > window.__prevOnce ? '▲' : '▼';
+      na.style.color = newOnce > window.__prevOnce ? '#8ef08a' : '#ff6357';
+    }
+    window.__prevOnce = newOnce;
+    nv.textContent = swiss(oz);
+  }catch(e){}
   /* horodatage */
   try{
     var t=new Date(model.ts);
@@ -628,28 +702,43 @@ clock(); setInterval(clock,5000);
   gen();
 })();
 
-/* ── médias (créations NEXUS validées) ── */
+/* ── médias : hébergés chez NOUS (GitHub Pages, même origine) — jamais de page vide :
+   une scène n'entre dans la boucle QUE si son fichier s'est vraiment chargé ── */
 var MEDIA=[
-  {type:'image', dur:11, cap:'OR · ACHAT & VENTE',
-   url:'https://d8j0ntlcm91z4.cloudfront.net/user_3ERgVw54kAKIlamlv13ztgf54wD/hf_20260820_115617_b8f2e818-0a19-469e-b424-c8d5ffe5bd8d.png'},
-  {type:'video', dur:11, cap:'OR FIN 999.9 · HELVETICA EXCHANGE',
-   url:'https://d8j0ntlcm91z4.cloudfront.net/user_3ERgVw54kAKIlamlv13ztgf54wD/hf_20260820_113001_85c4a57f-4681-4ea2-8059-300aceab7c8f.mp4'}
+  {type:'image', dur:8, cap:'Toutes devises · Un comptoir — Every currency · One counter',
+   url:'assets/currency.jpg'}
 ];
 var mIdx=0, mediaOk={};
+var PANEL='assets/gold-panel.jpg', panelOk=false;
+(function(){
+  var i, m2;
+  for(i=0;i<MEDIA.length;i++){ m2=MEDIA[i]; (function(mm){
+    var im=new Image();
+    im.onload=function(){ mediaOk[mm.url]=true; };
+    im.onerror=function(){ mediaOk[mm.url]=false; };
+    im.src=mm.url;
+  })(m2); }
+  var gp=new Image();
+  gp.onload=function(){ panelOk=true; document.getElementById('gp-img').src=PANEL; };
+  gp.onerror=function(){ panelOk=false; };
+  gp.src=PANEL;
+})();
 
 /* ── moteur de scènes ── */
 var SC={rates:document.getElementById('sc-rates'), gold:document.getElementById('sc-gold'),
-        media:document.getElementById('sc-media'), msg:document.getElementById('sc-msg')};
+        media:document.getElementById('sc-media'), msg:document.getElementById('sc-msg'),
+        goldpanel:document.getElementById('sc-goldpanel')};
 var cur='rates';
 function show(name){
   if(SC[cur]) SC[cur].classList.remove('on');
   cur=name; SC[cur].classList.add('on');
+  document.body.className = (name==='goldpanel') ? 'gpon' : '';
 }
 function playMedia(m){
   var fr=document.getElementById('mframe'); fr.innerHTML='';
   document.querySelector('#mcap .t').textContent=m.cap;
   if(m.type==='image'){
-    var im=document.createElement('img'); im.className='kb'; im.src=m.url;
+    var im=document.createElement('img'); if(!LOWFX) im.className='kb'; im.src=m.url;
     im.onerror=function(){ mediaOk[m.url]=false; }; fr.appendChild(im);
   } else {
     var vd=document.createElement('video');
@@ -659,13 +748,16 @@ function playMedia(m){
   }
 }
 function cycle(){
-  /* tour complet calé sur 60 s pile : taux 25 + or 12 + média 11 + bienvenue 12
-     (sans média : taux 25 + or 12 + bienvenue 12 = 49 s) */
+  /* ordre AURÈLE (accroche → preuve → offre → accueil), tour = 60 s pile :
+     média 8 + taux 24 + or 18 + bienvenue 10 · sans média : 28+20+12 = 60 */
   var m=MEDIA.length? MEDIA[mIdx%MEDIA.length] : null;
-  var useMedia = m && mediaOk[m.url]!==false;
-  var seq=[['rates',25000],['gold',12000]];
-  if(useMedia) seq.push(['media',11000]);
-  seq.push(['msg',12000]);
+  var useMedia = m && mediaOk[m.url]===true;
+  var goldScene = panelOk ? 'goldpanel' : 'gold';
+  var seq=[];
+  if(useMedia) seq.push(['media',8000]);
+  seq.push(['rates', useMedia?24000:28000]);
+  seq.push([goldScene, useMedia?18000:20000]);
+  seq.push(['msg', useMedia?10000:12000]);
   var i=0;
   (function nx(){
     var s=seq[i%seq.length];
@@ -677,6 +769,15 @@ function cycle(){
   })();
 }
 cycle();
+
+/* ── MODE NUIT 22h–6h : « L'or ne dort jamais » (idée signature AURÈLE) ── */
+function nightCheck(){
+  var h=new Date().getHours(), night=(h>=22||h<6);
+  var el=document.getElementById('sc-night');
+  if(night && !el.classList.contains('on')) el.classList.add('on');
+  if(!night && el.classList.contains('on')) el.classList.remove('on');
+}
+nightCheck(); setInterval(nightCheck, 60000);
 </script>
 </body>
 </html>
