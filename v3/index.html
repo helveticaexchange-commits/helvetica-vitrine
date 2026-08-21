@@ -229,21 +229,31 @@ body.gpon .frame,body.gpon .corn{opacity:0;transition:opacity 1s ease}
   background-size:300% 100%;background-repeat:no-repeat;
   animation:rayswp 21s linear infinite}
 @keyframes rayswp{0%{background-position:220% 0}12%{background-position:-120% 0}100%{background-position:-120% 0}}
-/* ── v3 : LE FIL D'OR — courbe intraday réelle tracée à l'heure pile ── */
-#sc-goldwire{position:absolute;left:0;top:0;width:2100px;height:2100px;z-index:8;opacity:0;
-  transition:opacity 1.4s ease;pointer-events:none;background:#0a0703;text-align:center}
-#sc-goldwire.on{opacity:1}
-.gw-t{padding-top:210px;font-size:64px;letter-spacing:.42em;color:#c9963e;font-family:Georgia,serif}
-.gw-v{margin-top:36px;font-size:150px;font-weight:600;font-variant-numeric:tabular-nums;color:#fff0c0;
-  text-shadow:0 0 50px rgba(255,200,80,.55)}
-.gw-v small{font-size:52px;color:#dfae62;margin-left:22px}
-#gw-svg{position:absolute;left:150px;top:640px;width:1800px;height:900px}
-.gw-lab{position:absolute;font-size:34px;color:#8a6b3a;font-family:Georgia,serif;letter-spacing:.1em}
-.gw-s{position:absolute;left:0;right:0;bottom:230px;font-size:50px;letter-spacing:.16em;color:#ffe2a0}
+/* ── v3.2 : LE FIL D'OR intégré à la page OR FIN — médaillon intraday (verdict Fafa) ── */
+#gwi{margin-top:44px;position:relative;width:1560px}
+#gwi svg{display:block;width:1560px;height:300px;overflow:visible}
+#gwi-path{fill:none;stroke:#ffd76a;stroke-width:6;stroke-linecap:round;
+  filter:drop-shadow(0 0 14px rgba(255,205,90,.45))}
+.gwi-lab{position:absolute;font-size:30px;color:#8a6b3a;font-family:Georgia,serif;letter-spacing:.08em}
+#gwi-cap{margin-top:16px;font-size:37px;letter-spacing:.2em;color:#c9963e;font-family:Georgia,serif}
+#gwi-cap b{font-weight:600;color:#7de87f;text-shadow:0 0 16px rgba(110,230,110,.5)}
+#gwi-cap b.dn{color:#ff6357;text-shadow:0 0 16px rgba(255,90,70,.5)}
+#gwi-cap .gwv{font-variant:small-caps;letter-spacing:.08em;display:none}
+#gwi-abs{color:#e8c078}
 /* ── v3 : LE POINÇON — estampe du monogramme en clôture de boucle ── */
 #sc-stamp{position:absolute;left:0;top:0;width:2100px;height:2100px;z-index:8;opacity:0;
-  pointer-events:none;background-color:#000;display:none;text-align:center;
-  background-size:1240px 1240px;background-position:center;background-repeat:no-repeat}
+  pointer-events:none;display:none;text-align:center;background-color:#0d0702;
+  background-image:radial-gradient(1250px 1250px at 50% 46%, #2a1a06 0%, #140b03 62%, #0b0602 100%);
+  background-size:1240px 1240px, cover;background-position:50% 46%, center;background-repeat:no-repeat}
+#sc-stamp .stf{position:absolute;left:34px;top:34px;right:34px;bottom:34px;
+  border:3px solid rgba(255,214,106,.55);
+  box-shadow:0 0 60px rgba(255,190,80,.28) inset, 0 0 40px rgba(255,190,80,.22)}
+#sc-stamp .stf:before{content:'';position:absolute;left:14px;top:14px;right:14px;bottom:14px;
+  border:1.5px solid rgba(255,214,106,.30)}
+#stamp-cap{position:absolute;left:0;right:0;bottom:170px;font-size:54px;letter-spacing:.34em;
+  color:#e8c078;font-family:Georgia,serif;text-shadow:0 0 24px rgba(255,190,80,.4)}
+#curve{transition:opacity .8s ease}
+body.goldon #curve{opacity:0}
 #sc-stamp.haslogo #stamp-svg{visibility:hidden}
 #sc-stamp.on{display:block;animation:stampin 2.2s steps(1) forwards}
 @keyframes stampin{0%{opacity:0}10%{opacity:1}100%{opacity:1}}
@@ -333,6 +343,15 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
         <b id="gag-g">1.72</b><span>CHF/g</span>
         <b id="gag-kg">1'721</b><span>CHF/kg</span>
       </div>
+      <div id="gwi">
+        <svg viewBox="0 0 1560 300" preserveAspectRatio="none">
+          <path id="gwi-path"/>
+          <circle id="gwi-tip" r="10" fill="#fff0c0" opacity="0"/>
+        </svg>
+        <div class="gwi-lab" id="gwi-max" style="left:4px;top:-8px">—</div>
+        <div class="gwi-lab" id="gwi-min" style="left:4px;bottom:-8px">—</div>
+      </div>
+      <div id="gwi-cap">LE FIL D'OR · AUJOURD'HUI <b id="gwi-dta"></b><span id="gwi-abs"></span><span class="gwv" id="gwi-ref"></span></div>
     </section>
 
     <!-- MÉDIA -->
@@ -392,21 +411,11 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
     <div class="ray"></div>
   </section>
 
-  <!-- LE FIL D'OR : courbe intraday reelle, tracee a l'heure pile -->
-  <section id="sc-goldwire">
-    <div class="gw-t">OR · AUJOURD'HUI · CHF LE GRAMME</div>
-    <div class="gw-v"><span id="gw-val">—</span><small id="gw-dta"></small><small class="gwref" id="gw-ref">vs veille</small></div>
-    <svg id="gw-svg" viewBox="0 0 1800 900" preserveAspectRatio="none">
-      <path id="gw-path" fill="none" stroke="#ffd76a" stroke-width="5" stroke-linecap="round"/>
-      <circle id="gw-tip" r="11" fill="#fff0c0" opacity="0"/>
-    </svg>
-    <div class="gw-lab" id="gw-min" style="left:160px;bottom:520px">—</div>
-    <div class="gw-lab" id="gw-max" style="left:160px;top:600px">—</div>
-    <div class="gw-s">Le fil d'or du jour · Today's gold thread</div>
-  </section>
-
   <!-- LE POINCON : estampe du monogramme en cloture de boucle -->
   <section id="sc-stamp">
+    <div class="stf"></div>
+    <div class="ray"></div>
+    <div id="stamp-cap">HELVETICA EXCHANGE · GENÈVE</div>
     <svg id="stamp-svg" viewBox="0 0 900 900">
       <circle cx="450" cy="450" r="420" fill="none" stroke="#ffd76a" stroke-width="7"/>
       <circle cx="450" cy="450" r="392" fill="none" stroke="#c9963e" stroke-width="2.5"/>
@@ -575,12 +584,20 @@ function loadRefs(){
       for(i=0;i<rows.length;i++){ b=rows[i].base; if(REFS[b]===undefined) REFS[b]=+rows[i].rate; }
       renderBoard();
     }).catch(function(){});
-  fetch(CLOUD+'/rest/v1/metal_spots?metal=eq.or&currency=eq.CHF&ts=lt.'+iso+'&order=ts.desc&limit=1&select=price_per_g',
+  /* clôture = MÉDIANE des 7 derniers points avant 23h : robuste aux points aberrants
+     (unité once/kilo glissée dans la colonne au gramme) sans toucher à la base. */
+  var medianRef = function(j){
+    var v=[], i; for(i=0;i<(j||[]).length;i++) v.push(+j[i].price_per_g);
+    if(!v.length) return null;
+    v.sort(function(a,b){return a-b;});
+    return v[Math.floor(v.length/2)];
+  };
+  fetch(CLOUD+'/rest/v1/metal_spots?metal=eq.or&currency=eq.CHF&ts=lt.'+iso+'&order=ts.desc&limit=7&select=price_per_g',
     {headers:H2}).then(function(r){return r.json();}).then(function(j){
-      if(j&&j[0]) { REFS.XAU=+j[0].price_per_g; renderBoard(); } }).catch(function(){});
-  fetch(CLOUD+'/rest/v1/metal_spots?metal=eq.argent&currency=eq.CHF&ts=lt.'+iso+'&order=ts.desc&limit=1&select=price_per_g',
+      var m=medianRef(j); if(m) { REFS.XAU=m; renderBoard(); } }).catch(function(){});
+  fetch(CLOUD+'/rest/v1/metal_spots?metal=eq.argent&currency=eq.CHF&ts=lt.'+iso+'&order=ts.desc&limit=7&select=price_per_g',
     {headers:H2}).then(function(r){return r.json();}).then(function(j){
-      if(j&&j[0]) { REFS.XAG=+j[0].price_per_g; renderBoard(); } }).catch(function(){});
+      var m=medianRef(j); if(m) { REFS.XAG=m; renderBoard(); } }).catch(function(){});
 }
 function arrowFor(cur, ref){
   if(!ref || !cur) return null;
@@ -680,9 +697,18 @@ function renderBoard(){
     var eAu = document.getElementById('gpd-au'), eAg = document.getElementById('gpd-ag');
     if(eAu && dAu){ eAu.className='gd '+dAu.c; eAu.innerHTML='<b>'+dAu.a+'</b><span>'+dAu.p+'</span><i>vs veille</i>'; }
     if(eAg && dAg){ eAg.className='gd '+dAg.c; eAg.innerHTML='<b>'+dAg.a+'</b><span>'+dAg.p+'</span><i>vs veille</i>'; }
-    var ng = document.getElementById('gw-val'); if(ng) ng.textContent = f2(og);
-    var ngd = document.getElementById('gw-dta'); if(ngd && dAu) ngd.textContent = ' '+dAu.p;
-    var ngr = document.getElementById('gw-ref'); if(ngr) ngr.style.display = dAu ? 'inline' : 'none';
+    var ngd = document.getElementById('gwi-dta');
+    var nga = document.getElementById('gwi-abs');
+    var ngr = document.getElementById('gwi-ref');
+    if(ngd && dAu){
+      ngd.textContent = dAu.a+' '+dAu.p; ngd.className = dAu.c==='dn' ? 'dn' : '';
+      /* verdict Fafa : l'écart en francs AU KILO + la valeur de référence d'hier, pas que le % */
+      var absK = (og - REFS.XAU)*1000;
+      if(nga) nga.textContent = ' · '+(absK>=0?'+':'−')+swiss(Math.abs(absK))+' CHF/kg';
+      if(ngr){ ngr.textContent = ' · hier '+swiss(REFS.XAU*1000); ngr.style.display='inline'; }
+    } else {
+      if(nga) nga.textContent=''; if(ngr) ngr.style.display='none';
+    }
     var nv = document.getElementById('nt-val'), na = document.getElementById('nt-ar');
     var newOnce = Math.round(oz);
     if (window.__prevOnce && newOnce !== window.__prevOnce){
@@ -925,7 +951,7 @@ var LOGO='assets/logo.png';
   var lg=new Image();
   lg.onload=function(){
     var st=document.getElementById('sc-stamp');
-    if(st){ st.style.backgroundImage="url('"+LOGO+"')"; st.className+=' haslogo'; }
+    if(st){ st.style.backgroundImage="url('"+LOGO+"'), radial-gradient(1250px 1250px at 50% 46%, #2a1a06 0%, #140b03 62%, #0b0602 100%)"; st.className+=' haslogo'; }
   };
   lg.src=LOGO;
 })();
@@ -944,15 +970,15 @@ var SC={rates:document.getElementById('sc-rates'), gold:document.getElementById(
         media:document.getElementById('sc-media'), msg:document.getElementById('sc-msg'),
         goldpanel:document.getElementById('sc-goldpanel'),
         billets:document.getElementById('sc-billets'),
-        goldwire:document.getElementById('sc-goldwire'),
         stamp:document.getElementById('sc-stamp')};
 var cur='rates';
-var FULLB={goldpanel:1,billets:1,goldwire:1,stamp:1};
+var FULLB={goldpanel:1,billets:1,stamp:1};
 function show(name){
   if(SC[cur]) SC[cur].classList.remove('on');
   cur=name; if(SC[cur]) SC[cur].classList.add('on');
-  document.body.className = FULLB[name] ? 'gpon' : '';
+  document.body.className = FULLB[name] ? 'gpon' : (name==='gold' ? 'goldon' : '');
   if(name==='rates') setTimeout(spinAll, 350);   /* v3 : les chiffres roulent puis s'arretent */
+  if(name==='gold') setTimeout(drawWire, 500);   /* v3.2 : le fil d'or se trace dans la page or fin */
 }
 function playMedia(m){
   var fr=document.getElementById('mframe'); fr.innerHTML='';
@@ -977,19 +1003,15 @@ function cycle(){
   var seq=[];
   if(useBillets) seq.push(['billets',8000]);
   else if(useMedia) seq.push(['media',8000]);
-  seq.push(['rates', hasHook?24000:28000]);
-  seq.push(['gold*', hasHook?16000:19000]);
+  seq.push(['rates', hasHook?22000:26000]);
+  seq.push(['gold', hasHook?13000:15000]);   /* v3.2 : OR FIN + fil d'or intégré */
+  seq.push(['gold*', hasHook?13000:15000]);  /* panneau lingots (image) */
   seq.push(['msg', hasHook?8000:10000]);
   seq.push(['stamp',2400]);
   var i=0;
   (function nx(){
     var s=seq[i%seq.length], name=s[0];
-    if(name==='gold*'){
-      var n=new Date();
-      if(gwPts.length>5 && hourWireDone!==n.getHours() && n.getMinutes()<3){
-        name='goldwire'; hourWireDone=n.getHours(); drawWire();
-      } else name = panelOk ? 'goldpanel' : 'gold';
-    }
+    if(name==='gold*'){ name = panelOk ? 'goldpanel' : 'gold'; }
     if(name==='media'){ playMedia(m); }
     show(name);
     i++;
@@ -1008,16 +1030,25 @@ function loadIntraday(){
   .then(function(r){return r.json();})
   .then(function(rows){
     if(rows && rows.length){
-      var i,out=[];
-      for(i=0;i<rows.length;i++) out.push([+new Date(rows[i].ts), +rows[i].price_per_g]);
-      gwPts=out;
+      /* canari intraday : la base contient parfois un prix à l'once ou au kilo glissé
+         dans la colonne au gramme (ex. 6554, 198617) — on écarte tout point à plus
+         de ±30 % de la médiane du jour, l'or ne bouge jamais autant en séance. */
+      var i, vals=[], med, out=[];
+      for(i=0;i<rows.length;i++) vals.push(+rows[i].price_per_g);
+      vals.sort(function(a,b){return a-b;});
+      med = vals[Math.floor(vals.length/2)];
+      for(i=0;i<rows.length;i++){
+        var p=+rows[i].price_per_g;
+        if(p >= med*0.7 && p <= med*1.3) out.push([+new Date(rows[i].ts), p]);
+      }
+      if(out.length>=2) gwPts=out;
     }
   }).catch(function(){});
 }
 loadIntraday(); setInterval(loadIntraday, 600000);
 function drawWire(){
   if(gwPts.length<2) return;
-  var W=1800,H=900,P=70, i, mn=1e12, mx=-1e12, t0=gwPts[0][0], t1=gwPts[gwPts.length-1][0];
+  var W=1560,H=300,P=44, i, mn=1e12, mx=-1e12, t0=gwPts[0][0], t1=gwPts[gwPts.length-1][0];
   for(i=0;i<gwPts.length;i++){ if(gwPts[i][1]<mn)mn=gwPts[i][1]; if(gwPts[i][1]>mx)mx=gwPts[i][1]; }
   if(mx-mn < 0.2){ var c=(mx+mn)/2; mn=c-0.1; mx=c+0.1; }
   var d='';
@@ -1026,22 +1057,22 @@ function drawWire(){
     var y=H-P-(H-2*P)*(gwPts[i][1]-mn)/(mx-mn);
     d+=(i===0?'M':'L')+x.toFixed(1)+' '+y.toFixed(1);
   }
-  var path=document.getElementById('gw-path'), tip=document.getElementById('gw-tip');
-  var eMin=document.getElementById('gw-min'), eMax=document.getElementById('gw-max');
+  var path=document.getElementById('gwi-path'), tip=document.getElementById('gwi-tip');
+  var eMin=document.getElementById('gwi-min'), eMax=document.getElementById('gwi-max');
   if(eMin) eMin.textContent='min '+f2(mn); if(eMax) eMax.textContent='max '+f2(mx);
   path.setAttribute('d',d);
   var L=path.getTotalLength();
   path.style.transition='none';
   path.style.strokeDasharray=L+' '+L; path.style.strokeDashoffset=L;
   void path.getBoundingClientRect();
-  path.style.transition='stroke-dashoffset 9s ease-in-out';
+  path.style.transition='stroke-dashoffset 4.5s ease-in-out';
   path.style.strokeDashoffset='0';
   var t00=Date.now();
   (function mv(){
-    var f=Math.min(1,(Date.now()-t00)/9000);
+    var f=Math.min(1,(Date.now()-t00)/4500);
     var pt=path.getPointAtLength(L*f);
     tip.setAttribute('cx',pt.x); tip.setAttribute('cy',pt.y); tip.setAttribute('opacity','.95');
-    if(f<1 && cur==='goldwire') setTimeout(mv, LOWFX?50:25);
+    if(f<1 && cur==='gold') setTimeout(mv, LOWFX?50:25);
   })();
 }
 
