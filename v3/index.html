@@ -204,19 +204,34 @@ body.gpon .frame,body.gpon .corn{opacity:1;z-index:60}
 #bl-fan{position:absolute;left:12%;top:29.5%;width:76%;
   filter:drop-shadow(0 34px 60px rgba(0,0,0,.6))}
 /* ── MODE NUIT 22h–6h « L'or ne dort jamais » ── */
-#sc-night{position:absolute;left:0;top:0;width:2100px;height:2100px;z-index:9;background:#060402;opacity:0;transition:opacity 2.2s ease;
-  pointer-events:none;text-align:center}
+#sc-night{position:absolute;left:0;top:0;width:2100px;height:2100px;z-index:9;opacity:0;transition:opacity 2.2s ease;
+  pointer-events:none;text-align:center;background-color:#060402;
+  background-size:cover;background-position:center bottom;background-repeat:no-repeat}
 #sc-night.on{opacity:1}
-.nt-t{padding-top:330px;font-size:62px;letter-spacing:.48em;color:#c9963e;font-family:Georgia,serif}
-.nt-v{margin-top:70px;font-size:330px;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;
+/* v3.10 : l'écrin complet pour l'aube et la nuit — cadre maison, logo, décor pièces & lingots */
+#sc-night .ntf{position:absolute;left:34px;top:34px;right:34px;bottom:34px;
+  border:3px solid rgba(255,214,106,.55);
+  box-shadow:0 0 60px rgba(255,190,80,.28) inset, 0 0 40px rgba(255,190,80,.22)}
+#sc-night .ntf:before{content:'';position:absolute;left:14px;top:14px;right:14px;bottom:14px;
+  border:1.5px solid rgba(255,214,106,.30)}
+#nt-scrim{position:absolute;left:0;right:0;bottom:0;height:430px;
+  background:linear-gradient(180deg,rgba(6,4,2,0),rgba(6,4,2,.60))}
+#nt-logo{position:absolute;left:0;right:0;top:120px;margin:0 auto;width:400px;height:400px;
+  background:url('assets/logo.png') center/contain no-repeat;
+  filter:drop-shadow(0 0 44px rgba(255,200,80,.35))}
+.nt-t{padding-top:560px;font-size:62px;letter-spacing:.48em;color:#c9963e;font-family:Georgia,serif;
+  text-shadow:0 2px 14px rgba(0,0,0,.8)}
+.nt-v{margin-top:40px;font-size:330px;line-height:1;font-weight:600;font-variant-numeric:tabular-nums;
   background:linear-gradient(180deg,#fff3cf 6%,#ffd76a 46%,#b8860b 92%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
   animation:nbr 6s ease-in-out infinite}
 @keyframes nbr{0%,100%{filter:drop-shadow(0 0 26px rgba(255,200,80,.25))}50%{filter:drop-shadow(0 0 90px rgba(255,200,80,.6))}}
 .nt-u{margin-top:34px;font-size:50px;letter-spacing:.4em;color:#dfae62;font-family:Georgia,serif}
 #nt-ar{font-size:110px;vertical-align:middle;margin-left:36px}
-.nt-s{position:absolute;left:0;right:0;bottom:225px;font-size:56px;letter-spacing:.14em;color:#ffe2a0}
-.nt-ad{position:absolute;left:0;right:0;bottom:135px;font-size:33px;letter-spacing:.3em;color:#8a6b3a;font-family:Georgia,serif}
+.nt-s{position:absolute;left:0;right:0;bottom:225px;font-size:56px;letter-spacing:.14em;color:#ffe2a0;
+  text-shadow:0 2px 18px rgba(0,0,0,.85)}
+.nt-ad{position:absolute;left:0;right:0;bottom:135px;font-size:33px;letter-spacing:.3em;color:#c9963e;
+  font-family:Georgia,serif;text-shadow:0 2px 14px rgba(0,0,0,.85)}
 /* ── v3 : flèches boursières vs veille ── */
 .dta{display:inline-block;font-size:52px;margin-left:26px;vertical-align:middle;line-height:1}
 .dta.up{color:#7de87f;text-shadow:0 0 18px rgba(110,230,110,.6)}
@@ -444,6 +459,9 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
 
   <!-- MODE NUIT 22h–6h « L'or ne dort jamais » -->
   <section id="sc-night">
+    <div class="ntf"></div>
+    <div id="nt-scrim"></div>
+    <div id="nt-logo"></div>
     <div class="nt-t">OR FIN 999.9 · CHF · L'ONCE</div>
     <div class="nt-v"><span id="nt-val">3'652</span><span id="nt-ar" style="color:#8ef08a">▲</span></div>
     <div class="nt-u">COURS EN DIRECT · LIVE</div>
@@ -1032,6 +1050,13 @@ var LOGO='assets/logo.png';
   lg.onload=function(){
     var st=document.getElementById('sc-stamp');
     if(st){ st.style.backgroundImage="url('"+LOGO+"'), radial-gradient(1250px 1250px at 50% 46%, #2a1a06 0%, #140b03 62%, #0b0602 100%)"; st.className+=' haslogo'; }
+    /* v3.10 : décor pièces & lingots pour l'aube et la nuit — servi par le bucket
+       vitrine-assets du Cloud (même maison que les taux, zéro push git pour les images) */
+    var NDEC = CLOUD+'/storage/v1/object/public/vitrine-assets/night-decor.jpg';
+    var nd=new Image();
+    nd.onload=function(){ var nn=document.getElementById('sc-night');
+      if(nn) nn.style.backgroundImage="url('"+NDEC+"')"; };
+    nd.src=NDEC;
   };
   lg.src=LOGO;
 })();
