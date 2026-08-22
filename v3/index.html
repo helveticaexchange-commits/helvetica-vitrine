@@ -172,7 +172,7 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
   background-size:cover;background-position:center}
 #sc-goldpanel.on{opacity:1}
 #gp-img{position:absolute;left:0;top:0;width:2100px;height:2100px;object-fit:cover}
-.gp-cell{position:absolute;width:47.4%;height:9.3%;display:flex;align-items:center;
+.gp-cell{position:absolute;width:44.2%;height:8.5%;display:flex;align-items:center;
   padding:0 3.2% 0 2%;font-variant-numeric:tabular-nums;font-family:'Helvetica Neue',Arial,sans-serif}
 .gp-cell>b{flex:1;text-align:right}
 .gp-cell .u{width:170px;text-align:left}
@@ -191,8 +191,10 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
 .gwref{font-size:26px;color:#c9963e;letter-spacing:.08em;font-variant:small-caps;
   margin-left:14px;display:none}
 .vsv{color:#c9963e;font-variant:small-caps;letter-spacing:.1em}
-body.gpon header,body.gpon .hrule,body.gpon #tickw,body.gpon footer,
-body.gpon .frame,body.gpon .corn{opacity:0;transition:opacity 1s ease}
+body.gpon header,body.gpon .hrule,body.gpon #tickw,body.gpon footer{opacity:0;transition:opacity 1s ease}
+/* v3.9 (verdict Fafa 22.08) : le cadre maison reste visible sur les pages pleines
+   (panneau or, billets, poinçon) — même écrin que les autres pages. */
+body.gpon .frame,body.gpon .corn{opacity:1;z-index:60}
 /* ── PAGE BILLETS : écrin généré + VRAIS billets composés par la page ── */
 #sc-billets{position:absolute;left:0;top:0;width:2100px;height:2100px;z-index:8;opacity:0;
   transition:opacity 1.1s ease;pointer-events:none;background-color:#241505;
@@ -262,11 +264,6 @@ body.gpon .frame,body.gpon .corn{opacity:0;transition:opacity 1s ease}
   pointer-events:none;display:none;text-align:center;background-color:#0d0702;
   background-image:radial-gradient(1250px 1250px at 50% 46%, #2a1a06 0%, #140b03 62%, #0b0602 100%);
   background-size:1240px 1240px, cover;background-position:50% 46%, center;background-repeat:no-repeat}
-#sc-stamp .stf{position:absolute;left:34px;top:34px;right:34px;bottom:34px;
-  border:3px solid rgba(255,214,106,.55);
-  box-shadow:0 0 60px rgba(255,190,80,.28) inset, 0 0 40px rgba(255,190,80,.22)}
-#sc-stamp .stf:before{content:'';position:absolute;left:14px;top:14px;right:14px;bottom:14px;
-  border:1.5px solid rgba(255,214,106,.30)}
 #stamp-cap{position:absolute;left:0;right:0;bottom:170px;font-size:54px;letter-spacing:.34em;
   color:#e8c078;font-family:Georgia,serif;text-shadow:0 0 24px rgba(255,190,80,.4)}
 #curve{transition:opacity .8s ease}
@@ -419,8 +416,8 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
   <section id="sc-goldpanel">
     <img id="gp-img" alt="">
     <div class="ray"></div>
-    <div class="gp-cell" style="left:41.3%;top:25.2%"><b id="gpc-au-g">117.40</b><span class="u">CHF/g</span><span class="gd" id="gpd-au"><b>▲</b><span>—</span></span></div>
-    <div class="gp-cell" style="left:41.3%;top:38.2%"><b id="gpc-ag-g">1.78</b><span class="u">CHF/g</span><span class="gd" id="gpd-ag"><b>▲</b><span>—</span></span></div>
+    <div class="gp-cell" style="left:41.9%;top:26.4%"><b id="gpc-au-g">117.40</b><span class="u">CHF/g</span><span class="gd" id="gpd-au"><b>▲</b><span>—</span></span></div>
+    <div class="gp-cell" style="left:41.9%;top:38.2%"><b id="gpc-ag-g">1.78</b><span class="u">CHF/g</span><span class="gd" id="gpd-ag"><b>▲</b><span>—</span></span></div>
   </section>
 
   <!-- PAGE BILLETS : panneau complet généré (éventail superréaliste, textes fondus) -->
@@ -431,7 +428,6 @@ footer{position:absolute;left:110px;right:110px;bottom:118px;z-index:6;text-alig
 
   <!-- LE POINCON : estampe du monogramme en cloture de boucle -->
   <section id="sc-stamp">
-    <div class="stf"></div>
     <div class="ray"></div>
     <div id="stamp-fix"></div>
     <div id="stamp-cap">HELVETICA EXCHANGE · GENÈVE</div>
@@ -692,7 +688,7 @@ var FLAGS = {
   USD:'<svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#B22234"/><g fill="#fff"><rect y="3.4" width="60" height="3.4"/><rect y="10.2" width="60" height="3.4"/><rect y="17" width="60" height="3.4"/><rect y="23.8" width="60" height="3.4"/><rect y="30.6" width="60" height="3.4"/><rect y="37.4" width="60" height="3.4"/></g><rect width="26" height="20.4" fill="#3C3B6E"/><g fill="#fff"><circle cx="4" cy="4" r="1.3"/><circle cx="9" cy="4" r="1.3"/><circle cx="14" cy="4" r="1.3"/><circle cx="19" cy="4" r="1.3"/><circle cx="24" cy="4" r="1.3"/><circle cx="6.5" cy="8" r="1.3"/><circle cx="11.5" cy="8" r="1.3"/><circle cx="16.5" cy="8" r="1.3"/><circle cx="21.5" cy="8" r="1.3"/><circle cx="4" cy="12" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="14" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/><circle cx="24" cy="12" r="1.3"/><circle cx="6.5" cy="16" r="1.3"/><circle cx="11.5" cy="16" r="1.3"/><circle cx="16.5" cy="16" r="1.3"/><circle cx="21.5" cy="16" r="1.3"/></g></svg>',
   GBP:'<svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#012169"/><path d="M0 0L60 44M60 0L0 44" stroke="#fff" stroke-width="8.5"/><path d="M0 0L60 44M60 0L0 44" stroke="#C8102E" stroke-width="3.6"/><path d="M30 0V44M0 22H60" stroke="#fff" stroke-width="14"/><path d="M30 0V44M0 22H60" stroke="#C8102E" stroke-width="8"/></svg>',
   JPY:'<svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#fff"/><circle cx="30" cy="22" r="11.5" fill="#BC002D"/></svg>',
-  CAD:'<svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#fff"/><rect width="15" height="44" fill="#d52b1e"/><rect x="45" width="15" height="44" fill="#d52b1e"/><path fill="#d52b1e" d="M30 8l2.8 5.6 4.6-2.6-1.8 6.4 5.6-1-2.8 4.6 5.6 2-4.6 3.6 1.8 4.6-5.6-1.8-.8 5.6h-1.6l-.8-5.6-5.6 1.8 1.8-4.6-4.6-3.6 5.6-2-2.8-4.6 5.6 1-1.8-6.4 4.6 2.6z"/></svg>'
+  CAD:'<svg viewBox="0 0 60 44"><rect width="60" height="44" fill="#fff"/><rect width="15" height="44" fill="#d52b1e"/><rect x="45" width="15" height="44" fill="#d52b1e"/><g transform="translate(30,22.4) scale(0.062) translate(-249,-249)"><path fill="#d52b1e" d="M249 45l-46 86c-5 10-15 9-24 4l-34-17 25 132c5 25-12 25-21 14l-58-65-9 33c-1 4-6 9-13 8l-75-16 20 72c4 16 8 22-4 27l-27 12 129 105c5 4 8 11 6 18l-11 37c44-5 84-13 128-18 4 0 10 6 10 10l-6 137h31l-6-137c0-4 6-10 10-10 44 5 84 13 128 18l-11-37c-2-7 1-14 6-18l129-105-27-12c-12-5-8-11-4-27l20-72-75 16c-7 1-12-4-13-8l-9-33-58 65c-9 11-26 11-21-14l25-132-34 17c-9 5-19 6-24-4z"/></g></svg>'
 };
 
 /* instantané de secours (valeurs réelles du 21.08.2026 08:52) */
