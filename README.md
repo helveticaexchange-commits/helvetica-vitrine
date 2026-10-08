@@ -17,8 +17,9 @@ Contenu 100 % public : taux déjà publiés sur helveticaexchange.ch. Aucun secr
   (> 20 min) · « COURS AU COMPTOIR » = rien de fiable (> 36 h ou jamais reçu, pages or retirées de la boucle).
 - **Séquence** : Taux → 2 scènes → Taux → 2 scènes → Taux → Poinçon (la page des taux revient toutes les 2 scènes).
 - **Entête** : l'heure et la date sont mesurées et ne débordent jamais du cadre (3 paliers de repli).
-- **Page Taux** : odomètre (les chiffres roulent dans le sens du mouvement), fil d'or intraday par devise,
-  flèches vs la grille affichée hier 19 h (photo locale, repli VPS), badge « pour 100 / per 100 », entêtes FR/EN.
+- **Page Taux** : odomètre (les chiffres roulent dans le sens du mouvement), flèches vs la grille affichée
+  hier 19 h (photo locale, repli VPS), badge « pour 100 / per 100 », entêtes FR/EN. Sous chaque devise : le filet
+  droit seulement (la courbe de fond suffit).
 - **Polices embarquées** (Playfair Display, même origine) → même rendu sur le lecteur que sur le Mac.
 - **Mouvement** : Motion (moteur vanilla de Framer Motion) auto-hébergé dans `v4/vendor/`, repli CSS automatique.
 - **Hygiène** : `version.json` vérifié toutes les 30 min (rechargement automatique après un déploiement),

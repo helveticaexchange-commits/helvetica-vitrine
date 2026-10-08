@@ -16,8 +16,9 @@
    · SÉQUENCE : la page des taux revient toutes les deux scènes.
    · ENTÊTE : l'heure et la date ne débordent plus du cadre (mesure + repli).
    · PAGE TAUX nouvelle génération : chiffres qui roulent (odomètre),
-     fil d'or intraday par devise, flèches vs la grille affichée hier 19h,
-     unité « pour 100 » lisible, polices embarquées (même origine).
+     flèches vs la grille affichée hier 19h, unité « pour 100 » lisible,
+     polices embarquées (même origine). Sous chaque devise : le filet droit,
+     rien d'autre (verdict Fafa 08.10 — la courbe de fond suffit).
    · MOUVEMENT : Motion (moteur vanilla de Framer Motion, auto-hébergé,
      repli CSS automatique) · mode LED allégé conservé (?px=576).
    ═══════════════════════════════════════════════════════════════ */
@@ -112,8 +113,8 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
 .cols .hb{color:#9fe89b;text-shadow:0 0 22px rgba(120,230,120,.5)}
 .cols .hs{color:#ff9187;text-shadow:0 0 22px rgba(255,110,90,.5)}
 #rows{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;position:relative}
-.row{display:grid;grid-template-columns:660px 1fr 1fr;grid-template-rows:auto 40px;align-items:center;gap:0 40px;
-  padding:6px 26px 4px;position:relative;border-radius:14px}
+.row{display:grid;grid-template-columns:660px 1fr 1fr;align-items:center;gap:0 40px;
+  padding:12px 26px;position:relative;border-radius:14px}
 .row:not(:last-child):after{content:'';position:absolute;left:20px;right:20px;bottom:-3px;height:2.5px;
   background:linear-gradient(90deg,rgba(255,214,106,0),rgba(255,214,106,.62) 12%,rgba(255,214,106,.62) 88%,rgba(255,214,106,0))}
 /* lavis vert/rouge à chaque changement de cours */
@@ -121,7 +122,7 @@ main{position:absolute;left:110px;right:110px;top:448px;bottom:472px;z-index:5}
 .row.fl-dn{animation:fldn 2s ease}
 @keyframes flup{0%{background:rgba(110,230,110,0)}18%{background:rgba(110,230,110,.13)}100%{background:rgba(110,230,110,0)}}
 @keyframes fldn{0%{background:rgba(255,90,70,0)}18%{background:rgba(255,90,70,.13)}100%{background:rgba(255,90,70,0)}}
-.dev{display:flex;align-items:center;grid-row:1/3}
+.dev{display:flex;align-items:center}
 .dev .flag{margin-right:44px}
 .flag{width:225px;height:150px;border-radius:8px;overflow:hidden;flex:none;position:relative;
   box-shadow:0 5px 20px rgba(0,0,0,.5), 0 0 0 2px rgba(255,214,106,.5)}
@@ -155,12 +156,6 @@ body.en .nm .unit .l2{opacity:1}
 .od{position:relative;display:inline-block;width:.64em;height:1em;text-align:center}
 .od .g{position:absolute;left:0;top:0;width:100%;line-height:1;display:block;will-change:transform,opacity}
 .odp{display:inline-block;width:.3em;text-align:center}
-/* fil d'or intraday : la journée de chaque devise en une ligne sous ses cours */
-.spark{grid-column:2/4;grid-row:2;width:100%;height:40px;display:block;overflow:visible;opacity:.9}
-.spark path{fill:none;stroke:#ffd76a;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;opacity:.72}
-.spark .base{stroke:rgba(255,215,106,.22);stroke-width:2;stroke-dasharray:6 10}
-.spark circle{fill:#fff0c0}
-.spark .ref{fill:none;stroke:rgba(255,240,192,.35);stroke-width:2;stroke-dasharray:4 8}
 #rates-empty{position:absolute;left:0;right:0;top:46%;text-align:center;font-size:58px;letter-spacing:.18em;color:#e8c078;
   font-family:Georgia,serif;display:none;text-shadow:0 0 24px rgba(255,190,80,.5)}
 body.nodata #rates-empty{display:block}
@@ -493,7 +488,7 @@ body.nodata .dot{display:none}
    localStorage : derniers taux (36 h max, toujours horodatés à l'écran), historique du jour,
    photo locale de la grille affichée à 19 h, mémoire d'or. Aucune valeur codée en dur. */
 'use strict';
-var HX_VERSION = '4.0.0';
+var HX_VERSION = '4.0.1';
 
 /* ── réglages (tout ce que Fafa peut vouloir changer est ici) ── */
 var CFG = {
@@ -819,8 +814,8 @@ function dataAge(){ if(!model) return Infinity; var t=new Date(model.ts); if(isN
 function goldFresh(){ return !!(model && model.xau && dataAge() < CFG.cacheMaxH*60); }
 
 /* ═══════════ HISTORIQUE DU JOUR (fil d'or par devise) ═══════════ */
-var HIST = lsGet('hx_v4_hist') || {day:dayKey(), fx:{}, au:[]};
-if (HIST.day !== dayKey()) HIST = {day:dayKey(), fx:{}, au:[]};
+var HIST = lsGet('hx_v4_hist') || {day:dayKey(), au:[]};
+if (HIST.day !== dayKey()) HIST = {day:dayKey(), au:[]};
 function pushPt(arr, t, v){
   if(!(v>0)) return;
   if(arr.length && Math.abs(arr[arr.length-1][0]-t) < 30000) return;
@@ -828,10 +823,8 @@ function pushPt(arr, t, v){
 }
 function recordHistory(){
   if(!model) return;
-  if (HIST.day !== dayKey()) HIST = {day:dayKey(), fx:{}, au:[]};
+  if (HIST.day !== dayKey()) HIST = {day:dayKey(), au:[]};
   var t = +new Date(model.ts); if(isNaN(t)) t=Date.now();
-  for(var i=0;i<CUR.length;i++){ var c=CUR[i][0], d=model.fx[c]; if(!d) continue;
-    HIST.fx[c]=HIST.fx[c]||[]; pushPt(HIST.fx[c], t, d.mid); HIST.fx[c].sort(function(a,b){return a[0]-b[0];}); }
   if(model.xau){ pushPt(HIST.au, t, model.xau/1000); HIST.au.sort(function(a,b){return a[0]-b[0];}); }
   lsSet('hx_v4_hist', HIST);
 }
@@ -844,18 +837,6 @@ function mergeSeries(dst, pts){
 }
 function backfillToday(){
   var mid=new Date(); mid.setHours(0,0,0,0); var iso=mid.toISOString();
-  vget('fx_rates?quote=eq.CHF&base=in.(EUR,USD,GBP,JPY,CAD)&ts=gte.'+iso+'&order=ts.asc&select=base,rate,ts&limit=2500')
-  .then(function(rows){
-    var by={}, i;
-    for(i=0;i<rows.length;i++){ var b=rows[i].base, r=+rows[i].rate; if(!(r>0)) continue; (by[b]=by[b]||[]).push([+new Date(rows[i].ts), r]); }
-    for(var c in by){
-      /* canari : on écarte les points à plus de ±8 % de la médiane du jour */
-      var vals=by[c].map(function(p){return p[1];}).sort(function(a,b){return a-b;}), med=vals[Math.floor(vals.length/2)];
-      var clean=by[c].filter(function(p){ return p[1]>med*0.92 && p[1]<med*1.08; });
-      HIST.fx[c]=HIST.fx[c]||[]; mergeSeries(HIST.fx[c], clean);
-    }
-    lsSet('hx_v4_hist', HIST); drawSparks();
-  }).catch(function(){});
   vget('metal_spots?metal=eq.or&currency=eq.CHF&ts=gte.'+iso+'&order=ts.asc&select=ts,price_per_g&limit=600')
   .then(function(rows){
     if(!rows||!rows.length) return;
@@ -975,7 +956,6 @@ function buildRows(){
       +  '<span class="idn"><span class="code">'+c[0]+'</span><span class="dta" id="d-'+c[0]+'"></span>'
       +  '<div class="nm">'+c[1]+(c[2]!==1?'<span class="unit"><span class="l1">pour '+c[2]+'</span><span class="l2">per '+c[2]+'</span></span>':'')+'</div></span></div>'
       +  '<div class="val buy" id="b-'+c[0]+'"></div><div class="val sell" id="s-'+c[0]+'"></div>'
-      +  '<svg class="spark" id="sp-'+c[0]+'" viewBox="0 0 1000 40" preserveAspectRatio="none"><path class="ref" d=""/><path class="sp" d=""/><circle r="0"/></svg>'
       +  '</div>';
   }
   host.innerHTML=h;
@@ -1030,7 +1010,6 @@ function render(fromLive){
     var a = (pr && pr.board[c]) ? arrowFor(buy, +pr.board[c][0], 0.000001) : arrowFor(d.mid, REFS[c], 0.0002);
     ar.className = 'dta '+(a?a.c:''); ar.textContent = a ? a.a : '';
   }
-  drawSparks();
   /* or & argent */
   var gOK = goldFresh();
   var og = gOK ? model.xau/1000 : null, ag = (gOK && model.xag) ? model.xag/1000 : null, oz = og ? og*31.1034768 : null;
@@ -1065,34 +1044,6 @@ function render(fromLive){
   if (fromLive){ var dt=document.getElementById('livedot'); dt.classList.remove('beatx'); void dt.offsetWidth; dt.classList.add('beatx'); }
   renderTicker(); renderWeek(); takePhotoIfDue();
   if (cur==='gold') drawWire();
-}
-/* fil d'or par devise : la journée en une ligne, repère de la veille en pointillé */
-function drawSparks(){
-  var pr=photoRef();
-  for(var i=0;i<CUR.length;i++){
-    var c=CUR[i][0], svg=document.getElementById('sp-'+c); if(!svg) continue;
-    var pts=HIST.fx[c]||[], path=svg.querySelector('.sp'), ref=svg.querySelector('.ref'), dot=svg.querySelector('circle');
-    if(pts.length<2){ path.setAttribute('d',''); ref.setAttribute('d',''); dot.setAttribute('r','0'); continue; }
-    var j, mn=1e12, mx=-1e12;
-    for(j=0;j<pts.length;j++){ if(pts[j][1]<mn) mn=pts[j][1]; if(pts[j][1]>mx) mx=pts[j][1]; }
-    var refV = REFS[c];
-    if (refV){ if(refV<mn) mn=refV; if(refV>mx) mx=refV; }
-    var span=mx-mn, mid=(mx+mn)/2, minSpan=mid*0.003;      /* ±0,15 % minimum : une journée plate reste plate */
-    if(span<minSpan){ mn=mid-minSpan/2; mx=mid+minSpan/2; span=minSpan; }
-    var t0=pts[0][0], t1=pts[pts.length-1][0], W=1000, H=40, P=6, d='';
-    var dayStart=new Date(); dayStart.setHours(8,0,0,0); var dayEnd=new Date(); dayEnd.setHours(19,0,0,0);
-    var T0=Math.min(t0, +dayStart), T1=Math.max(t1, Math.min(+dayEnd, Date.now()));
-    for(j=0;j<pts.length;j++){
-      var x=P+(W-2*P)*(pts[j][0]-T0)/Math.max(60000,(T1-T0));
-      var y=H-P-(H-2*P)*(pts[j][1]-mn)/span;
-      d+=(j?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);
-    }
-    path.setAttribute('d',d);
-    var lx=P+(W-2*P)*(t1-T0)/Math.max(60000,(T1-T0)), ly=H-P-(H-2*P)*(pts[pts.length-1][1]-mn)/span;
-    dot.setAttribute('cx',lx.toFixed(1)); dot.setAttribute('cy',ly.toFixed(1)); dot.setAttribute('r','5');
-    if (refV){ var ry=H-P-(H-2*P)*(refV-mn)/span; ref.setAttribute('d','M'+P+' '+ry.toFixed(1)+'L'+(W-P)+' '+ry.toFixed(1)); }
-    else ref.setAttribute('d','');
-  }
 }
 /* ruban : métaux + crypto + devises de la liste blanche */
 function renderTicker(){
